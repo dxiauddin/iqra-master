@@ -91,7 +91,7 @@ export default async function DashboardPage() {
               <p className="text-xs text-gray-500">No hardware passkeys registered yet.</p>
             ) : (
               <div className="space-y-2">
-                {user.passkeys.map((passkey, index) => (
+                {user.passkeys.map((passkey: any, index: number) => (
                   <div key={passkey.id} className="p-3 bg-gray-900 rounded-lg border border-gray-800 text-xs flex justify-between items-center">
                     <div>
                       <span className="font-medium text-gray-300 block">Authenticator #{index + 1}</span>
