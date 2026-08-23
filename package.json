@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "postinstall": "pnpm --filter database db:generate"
+    "postinstall": "pnpm --filter @repo/database db:generate"
   },
   "devDependencies": {
     "turbo": "latest"
