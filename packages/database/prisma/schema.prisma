@@ -1,0 +1,98 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  USER
+  MEMBER
+  ADMIN
+  SUPER_ADMIN
+}
+
+model User {
+  id            String    @id @default(uuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  passwordHash  String?   // For strict password login fallback
+  role          Role      @default(USER) // Default role for new signups
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]
+  passkeys      Passkey[]
+  sessions      Session[]
+  auditLogs     AuditLog[]
+
+  @@index([email])
+}
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String  // "google", "facebook", "tiktok"
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Passkey {
+  id             String   @id @default(uuid())
+  userId         String
+  credentialID   String   @unique // Locked required WebAuthn identifier field
+  publicKey      Bytes
+  webAuthnUserId String
+  counter        Int
+  deviceType     String
+  backedUp       Boolean
+  transports     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String   // e.g., "LOGIN_FAILED", "PASSWORD_RESET_REQUEST", "UNAUTHORIZED_IP_SHIFT"
+  ipAddress String?
+  userAgent String?
+  metadata  String?  // JSON string or extra details
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+}
+
+model VerificationToken {
+  id         String   @id @default(uuid())
+  identifier String   @unique
+  token      String   @unique
+  expires    DateTime
+  attempts   Int      @default(0)
+
+  @@unique([identifier, token])
+}
