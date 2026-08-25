@@ -35,14 +35,50 @@ export default function HomePage() {
     }
   };
 
-  // Available Skala levels with descriptions for the card layout
+  // Available Skala levels with updated bullet point details
   const skalaData = [
-    { num: 1, desc: 'Asas Huruf Hijaiyah Tunggal' },
-    { num: 2, desc: 'Huruf Bersambung & Baris Atas' },
-    { num: 3, desc: 'Baris Bawah, Depan & Tanwin' },
-    { num: 4, desc: 'Mad Asli & Huruf Mad' },
-    { num: 5, desc: 'Wakaf & Tanda-tanda Bacaan' },
-    { num: 6, desc: 'Ayat Pilihan & Lancar Al-Quran' },
+    { 
+      num: 1, 
+      bullets: [
+        'Mengenal huruf hijaiyah',
+        'Mengenal baris atas bawah dan depan'
+      ] 
+    },
+    { 
+      num: 2, 
+      bullets: [
+        'Mengenal baris tanwin dan sabdu',
+        'Mengenal bentuk huruf bersambung'
+      ] 
+    },
+    { 
+      num: 3, 
+      bullets: [
+        'Mengenal huruf Mad',
+        'Mengenal hukum Izhar Halqi',
+        'Mengenal hukum Ikhfa Haqiqi'
+      ] 
+    },
+    { 
+      num: 4, 
+      bullets: [
+        'Mengenal huruf iklab',
+        'Mengenal huruf Idgham maal ghunnah',
+        'Mengenal huruf Idham bila ghunnah'
+      ] 
+    },
+    { 
+      num: 5, 
+      bullets: [
+        'Wakaf & Tanda-tanda Bacaan'
+      ] 
+    },
+    { 
+      num: 6, 
+      bullets: [
+        'Ayat Pilihan & Lancar Al-Quran'
+      ] 
+    },
   ];
 
   return (
@@ -87,7 +123,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Hero / Header Section with Matching Logo Size from Skala Dashboard */}
+      {/* Hero / Header Section */}
       <div className="max-w-md mx-auto w-full pt-0 pb-1 text-center relative z-10 space-y-1.5">
         <div className="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto block transition-transform hover:scale-105 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
           <Image 
@@ -119,13 +155,13 @@ export default function HomePage() {
         </p>
       </div>
 
-      {/* Skala Horizontal Sliding Carousel enclosed in a transparent Gojes Box with Mouse Drag Support */}
+      {/* Skala Horizontal Sliding Carousel with Solid Black Fill Gojes Box */}
       <section className="max-w-4xl mx-auto w-full pt-1 pb-2 relative z-10 px-4">
         <div className="relative w-full max-w-lg mx-auto">
           {/* Gojes Box Outer Glow */}
           <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 opacity-20 blur-sm pointer-events-none" />
 
-          {/* Gojes Box Container (Transparent Fill) */}
+          {/* Gojes Box Container (Solid Black Fill) */}
           <div className="relative p-[1.5px] rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 w-full">
             <div 
               ref={scrollRef}
@@ -133,7 +169,7 @@ export default function HomePage() {
               onMouseLeave={handleMouseLeave}
               onMouseUp={handleMouseUp}
               onMouseMove={handleMouseMove}
-              className={`w-full bg-zinc-950/40 backdrop-blur-3xl text-white rounded-[22px] py-4 px-3 overflow-x-auto scrollbar-none shadow-[0_15px_35px_rgba(0,0,0,0.8)] border border-white/15 ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
+              className={`w-full bg-zinc-950 backdrop-blur-3xl text-white rounded-[22px] py-4 px-3 overflow-x-auto scrollbar-none shadow-[0_15px_35px_rgba(0,0,0,0.8)] border border-white/15 ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
               style={{
                 scrollbarWidth: 'none',
                 msOverflowStyle: 'none',
@@ -151,19 +187,22 @@ export default function HomePage() {
                     key={item.num}
                     href={`/skala/${item.num}`}
                     draggable={false}
-                    className="w-44 sm:w-48 bg-zinc-900/60 hover:bg-zinc-900/80 rounded-xl p-3.5 flex flex-col justify-between h-32 transition-all shadow-md group border-0 opacity-100 shrink-0"
+                    className="w-56 sm:w-60 bg-zinc-900/80 hover:bg-zinc-900 rounded-xl p-4 flex flex-col justify-start h-36 transition-all shadow-md group border border-white/10 shrink-0 text-center"
                   >
-                    <div className="flex justify-between items-start pointer-events-none">
-                      <span className="text-[11px] font-medium text-zinc-400 uppercase tracking-wider">Tahap</span>
-                      <span className="text-base font-bold text-blue-400 group-hover:text-emerald-400 transition-colors">0{item.num}</span>
-                    </div>
+                    {/* Centered Skala Title */}
+                    <h3 className="text-sm font-bold tracking-tight text-white mb-2 group-hover:text-emerald-400 transition-colors pointer-events-none">
+                      Skala {item.num}
+                    </h3>
 
-                    <div className="space-y-1 pointer-events-none">
-                      <h3 className="text-xs sm:text-sm font-semibold tracking-tight text-white" style={{ letterSpacing: '-0.01em' }}>Skala {item.num}</h3>
-                      <p className="text-[10px] sm:text-[11px] text-zinc-400 leading-tight line-clamp-2">
-                        {item.desc}
-                      </p>
-                    </div>
+                    {/* Centered Bullet Points */}
+                    <ul className="space-y-1 text-left pointer-events-none mx-auto w-full">
+                      {item.bullets.map((bullet, idx) => (
+                        <li key={idx} className="text-[10px] sm:text-[11px] text-zinc-300 leading-tight flex items-start">
+                          <span className="mr-1.5 text-blue-400">•</span>
+                          <span className="line-clamp-1">{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </Link>
                 ))}
               </div>
