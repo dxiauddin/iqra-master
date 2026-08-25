@@ -2,8 +2,39 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRef, useState } from 'react';
 
 export default function HomePage() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  // Mouse drag handlers for desktop smooth sliding
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setStartX(e.pageX - (scrollRef.current?.offsetLeft || 0));
+    setScrollLeft(scrollRef.current?.scrollLeft || 0);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - (scrollRef.current?.offsetLeft || 0);
+    const walk = (x - startX) * 1.5; // Scroll speed multiplier
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft = scrollLeft - walk;
+    }
+  };
+
   // Available Skala levels with descriptions for the card layout
   const skalaData = [
     { num: 1, desc: 'Asas Huruf Hijaiyah Tunggal' },
@@ -16,8 +47,12 @@ export default function HomePage() {
 
   return (
     <main 
-      className="min-h-screen text-white flex flex-col justify-between relative px-4 font-sans antialiased overflow-x-hidden"
-      style={{ background: 'linear-gradient(to bottom, #0000FF 0%, #000000 30%, #000000 70%, #0000FF 100%)' }}
+      className="min-h-screen text-white flex flex-col justify-between relative px-4 overflow-x-hidden"
+      style={{ 
+        background: 'linear-gradient(to bottom, #0000FF 0%, #000000 30%, #000000 70%, #0000FF 100%)',
+        fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+        letterSpacing: '-0.015em'
+      }}
     >
       
       {/* Background Ambient Glow */}
@@ -52,7 +87,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Hero / Header Section: Shifted higher to prevent scrolling */}
+      {/* Hero / Header Section */}
       <div className="max-w-md mx-auto w-full pt-0 pb-1 text-center relative z-10 space-y-1.5">
         <div className="relative w-16 h-16 sm:w-20 sm:h-20 mx-auto block transition-transform hover:scale-105 drop-shadow-[0_0_20px_rgba(255,255,255,0.25)]">
           <Image 
@@ -65,66 +100,74 @@ export default function HomePage() {
           />
         </div>
         
-        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white">
+        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white" style={{ letterSpacing: '-0.02em' }}>
           Iqra&apos; Master
         </h1>
 
         <div className="pt-0.5 flex justify-center">
           <Link 
             href="/login"
-            className="inline-flex items-center justify-center py-2 px-6 rounded-full font-medium text-xs tracking-normal text-white shadow-lg transition-transform hover:scale-105 hover:opacity-90"
-            style={{ backgroundColor: '#0000FF' }}
+            className="inline-flex items-center justify-center py-2 px-6 rounded-full font-medium text-xs text-white shadow-lg transition-transform hover:scale-105 hover:opacity-90"
+            style={{ backgroundColor: '#0000FF', letterSpacing: '-0.01em' }}
           >
             Get Started
           </Link>
         </div>
 
-        <p className="text-xs text-zinc-300 font-normal pt-0.5 leading-snug">
+        <p className="text-xs text-zinc-300 font-normal pt-0.5 leading-snug" style={{ letterSpacing: '-0.005em' }}>
           Atau <br /> Pilih Skala di bawah untuk memulakan pembelajaran anda.
         </p>
       </div>
 
-      {/* Skala Horizontal Sliding Carousel with Hidden Scrollbar */}
-      <section className="max-w-4xl mx-auto w-full pt-1 pb-2 relative z-10">
-        <div 
-          className="relative w-full overflow-x-auto px-4 scrollbar-none"
-          style={{
-            scrollbarWidth: 'none', // Firefox
-            msOverflowStyle: 'none',  // Internet Explorer 10+
-          }}
-        >
-          {/* Inline style to hide scrollbar for Chrome, Safari, and Opera */}
-          <style jsx>{`
-            div::-webkit-scrollbar {
-              display: none;
-            }
-          `}</style>
+      {/* Skala Horizontal Sliding Carousel enclosed in a single Gojes Box with Mouse Drag Support */}
+      <section className="max-w-4xl mx-auto w-full pt-1 pb-2 relative z-10 px-4">
+        <div className="relative w-full max-w-lg mx-auto">
+          {/* Gojes Box Outer Glow */}
+          <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 opacity-20 blur-sm pointer-events-none" />
 
-          <div className="flex gap-4 w-max py-2">
-            {skalaData.map((item) => (
-              <div key={item.num} className="relative w-48 sm:w-56 shrink-0">
-                <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 opacity-20 blur-sm pointer-events-none" />
-                
-                <div className="relative p-[1.5px] rounded-2xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 w-full h-full">
+          {/* Gojes Box Container */}
+          <div className="relative p-[1.5px] rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 w-full">
+            <div 
+              ref={scrollRef}
+              onMouseDown={handleMouseDown}
+              onMouseLeave={handleMouseLeave}
+              onMouseUp={handleMouseUp}
+              onMouseMove={handleMouseMove}
+              className={`w-full bg-zinc-950 backdrop-blur-3xl text-white rounded-[22px] py-4 px-3 overflow-x-auto scrollbar-none shadow-[0_15px_35px_rgba(0,0,0,0.8)] border border-white/15 ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
+              style={{
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+              }}
+            >
+              <style jsx>{`
+                div::-webkit-scrollbar {
+                  display: none;
+                }
+              `}</style>
+
+              <div className="flex gap-3 w-max py-1">
+                {skalaData.map((item) => (
                   <Link
+                    key={item.num}
                     href={`/skala/${item.num}`}
-                    className="w-full bg-zinc-950/90 backdrop-blur-3xl text-white rounded-[14px] p-4 flex flex-col justify-between h-36 hover:bg-zinc-900 transition-all shadow-xl group border border-white/10"
+                    draggable={false}
+                    className="w-44 sm:w-48 bg-zinc-900 rounded-xl p-3.5 flex flex-col justify-between h-32 hover:bg-zinc-800 transition-all shadow-md group border-0 opacity-100 shrink-0"
                   >
-                    <div className="flex justify-between items-start">
-                      <span className="text-xs font-medium text-zinc-400 uppercase tracking-wider">Tahap</span>
-                      <span className="text-lg font-bold text-blue-400 group-hover:text-emerald-400 transition-colors">0{item.num}</span>
+                    <div className="flex justify-between items-start pointer-events-none">
+                      <span className="text-[11px] font-medium text-zinc-400 uppercase tracking-wider">Tahap</span>
+                      <span className="text-base font-bold text-blue-400 group-hover:text-emerald-400 transition-colors">0{item.num}</span>
                     </div>
 
-                    <div className="space-y-1">
-                      <h3 className="text-sm font-semibold tracking-tight text-white">Skala {item.num}</h3>
-                      <p className="text-[11px] text-zinc-400 leading-tight line-clamp-2">
+                    <div className="space-y-1 pointer-events-none">
+                      <h3 className="text-xs sm:text-sm font-semibold tracking-tight text-white" style={{ letterSpacing: '-0.01em' }}>Skala {item.num}</h3>
+                      <p className="text-[10px] sm:text-[11px] text-zinc-400 leading-tight line-clamp-2">
                         {item.desc}
                       </p>
                     </div>
                   </Link>
-                </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
@@ -136,14 +179,14 @@ export default function HomePage() {
         <div className="flex justify-center">
           <Link 
             href="/ujian-skala"
-            className="inline-flex items-center justify-center py-2 px-6 rounded-full font-medium text-xs tracking-normal text-white shadow-lg transition-transform hover:scale-105 hover:opacity-90"
-            style={{ backgroundColor: '#0000FF' }}
+            className="inline-flex items-center justify-center py-2 px-6 rounded-full font-medium text-xs text-white shadow-lg transition-transform hover:scale-105 hover:opacity-90"
+            style={{ backgroundColor: '#0000FF', letterSpacing: '-0.01em' }}
           >
             Mula Ujian Skala
           </Link>
         </div>
 
-        <p className="text-xs text-zinc-300 font-normal leading-snug max-w-sm">
+        <p className="text-xs text-zinc-300 font-normal leading-snug max-w-sm" style={{ letterSpacing: '-0.005em' }}>
           Sila ambil ujian ini untuk mengenal pasti tahap penguasaan bacaan anda serta mengetahui skala sebenar yang paling sesuai untuk dimulakan.
         </p>
       </div>
