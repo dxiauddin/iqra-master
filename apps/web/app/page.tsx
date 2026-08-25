@@ -59,11 +59,12 @@ export default function HomePage() {
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">Iqra&apos; Master</h1>
 
-        {/* Get Started Button */}
-        <div className="pt-1">
+        {/* Rounded Get Started Button with #0000FF Background */}
+        <div className="pt-1 flex justify-center">
           <Link 
             href="/login"
-            className="inline-block w-full py-2.5 px-6 rounded-xl font-bold text-xs tracking-wide bg-blue-600 hover:bg-blue-500 text-white shadow-md transition-transform hover:scale-[1.01]"
+            className="inline-flex items-center justify-center py-2 px-6 rounded-full font-bold text-xs tracking-wide text-white shadow-md transition-transform hover:scale-105 hover:opacity-90"
+            style={{ backgroundColor: '#0000FF' }}
           >
             Get Started
           </Link>
@@ -103,15 +104,21 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Bottom Section: Ujian Skala Button & Description (Remaining Unchanged) */}
+      {/* Bottom Section: Atau, Ujian Skala Button & Description */}
       <div className="max-w-md mx-auto w-full pb-4 px-6 flex flex-col items-center text-center relative z-10 space-y-2">
-        <Link 
-          href="/ujian-skala"
-          className="w-full py-3 px-6 rounded-xl font-bold text-sm tracking-wide bg-gradient-to-r from-blue-600 via-amber-500 to-red-600 hover:opacity-95 text-white shadow-lg transition-transform hover:scale-[1.02]"
-        >
-          Mula Ujian Skala
-        </Link>
-        <p className="text-xs text-zinc-400 leading-relaxed max-w-sm">
+        <span className="text-xs font-semibold text-zinc-400 tracking-wider">Atau</span>
+        
+        <div className="flex justify-center">
+          <Link 
+            href="/ujian-skala"
+            className="inline-flex items-center justify-center py-2 px-6 rounded-full font-bold text-xs tracking-wide text-white shadow-lg transition-transform hover:scale-105 hover:opacity-90"
+            style={{ backgroundColor: '#0000FF' }}
+          >
+            Mula Ujian Skala
+          </Link>
+        </div>
+
+        <p className="text-xs text-zinc-400 leading-relaxed max-w-sm pt-1">
           Sila ambil ujian ini untuk mengenal pasti tahap penguasaan bacaan anda serta mengetahui skala sebenar yang paling sesuai untuk dimulakan.
         </p>
       </div>
