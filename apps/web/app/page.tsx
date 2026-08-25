@@ -123,30 +123,30 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Content Wrapper pinned to the top using pt-2 instead of my-auto */}
-      <div className="w-full max-w-lg mx-auto flex flex-col items-center relative z-15 space-y-3 pt-2 pb-6">
+      {/* Main Content Area pinned tightly to the top */}
+      <div className="w-full max-w-lg mx-auto flex flex-col items-center relative z-15 space-y-3 pt-1 pb-6">
         
-        {/* Hero / Header Section */}
+        {/* Hero / Header Section with Exact Skala Dashboard Logo Size (w-24 h-24 sm:w-28 sm:h-28) */}
         <div className="w-full text-center space-y-1.5">
-          <div className="relative w-20 h-20 sm:w-24 sm:h-24 mx-auto block transition-transform hover:scale-105 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+          <div className="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto block transition-transform hover:scale-105 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
             <Image 
               src="/logo-kagat.png" 
               alt="Iqra' Master Logo" 
               fill
-              sizes="96px"
+              sizes="112px"
               priority
               className="object-contain"
             />
           </div>
           
-          <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-white" style={{ letterSpacing: '-0.02em' }}>
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white" style={{ letterSpacing: '-0.02em' }}>
             Iqra&apos; Master
           </h1>
 
           <div className="pt-0.5 flex justify-center">
             <Link 
               href="/login"
-              className="inline-flex items-center justify-center py-1.5 px-5 rounded-full font-medium text-xs text-white shadow-lg transition-transform hover:scale-105 hover:opacity-90"
+              className="inline-flex items-center justify-center py-2 px-6 rounded-full font-medium text-xs text-white shadow-lg transition-transform hover:scale-105 hover:opacity-90"
               style={{ backgroundColor: '#0000FF', letterSpacing: '-0.01em' }}
             >
               Get Started
