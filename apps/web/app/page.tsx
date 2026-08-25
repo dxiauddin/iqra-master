@@ -87,14 +87,14 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Hero / Header Section */}
+      {/* Hero / Header Section with Matching Logo Size from Skala Dashboard */}
       <div className="max-w-md mx-auto w-full pt-0 pb-1 text-center relative z-10 space-y-1.5">
-        <div className="relative w-16 h-16 sm:w-20 sm:h-20 mx-auto block transition-transform hover:scale-105 drop-shadow-[0_0_20px_rgba(255,255,255,0.25)]">
+        <div className="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto block transition-transform hover:scale-105 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
           <Image 
             src="/logo-kagat.png" 
             alt="Iqra' Master Logo" 
             fill
-            sizes="80px"
+            sizes="112px"
             priority
             className="object-contain"
           />
@@ -119,13 +119,13 @@ export default function HomePage() {
         </p>
       </div>
 
-      {/* Skala Horizontal Sliding Carousel enclosed in a single Gojes Box with Mouse Drag Support */}
+      {/* Skala Horizontal Sliding Carousel enclosed in a transparent Gojes Box with Mouse Drag Support */}
       <section className="max-w-4xl mx-auto w-full pt-1 pb-2 relative z-10 px-4">
         <div className="relative w-full max-w-lg mx-auto">
           {/* Gojes Box Outer Glow */}
           <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 opacity-20 blur-sm pointer-events-none" />
 
-          {/* Gojes Box Container */}
+          {/* Gojes Box Container (Transparent Fill) */}
           <div className="relative p-[1.5px] rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 w-full">
             <div 
               ref={scrollRef}
@@ -133,7 +133,7 @@ export default function HomePage() {
               onMouseLeave={handleMouseLeave}
               onMouseUp={handleMouseUp}
               onMouseMove={handleMouseMove}
-              className={`w-full bg-zinc-950 backdrop-blur-3xl text-white rounded-[22px] py-4 px-3 overflow-x-auto scrollbar-none shadow-[0_15px_35px_rgba(0,0,0,0.8)] border border-white/15 ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
+              className={`w-full bg-zinc-950/40 backdrop-blur-3xl text-white rounded-[22px] py-4 px-3 overflow-x-auto scrollbar-none shadow-[0_15px_35px_rgba(0,0,0,0.8)] border border-white/15 ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
               style={{
                 scrollbarWidth: 'none',
                 msOverflowStyle: 'none',
@@ -151,7 +151,7 @@ export default function HomePage() {
                     key={item.num}
                     href={`/skala/${item.num}`}
                     draggable={false}
-                    className="w-44 sm:w-48 bg-zinc-900 rounded-xl p-3.5 flex flex-col justify-between h-32 hover:bg-zinc-800 transition-all shadow-md group border-0 opacity-100 shrink-0"
+                    className="w-44 sm:w-48 bg-zinc-900/60 hover:bg-zinc-900/80 rounded-xl p-3.5 flex flex-col justify-between h-32 transition-all shadow-md group border-0 opacity-100 shrink-0"
                   >
                     <div className="flex justify-between items-start pointer-events-none">
                       <span className="text-[11px] font-medium text-zinc-400 uppercase tracking-wider">Tahap</span>
