@@ -123,27 +123,27 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Hero / Header Section */}
-      <div className="max-w-md mx-auto w-full pt-0 pb-1 text-center relative z-10 space-y-1.5">
-        <div className="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto block transition-transform hover:scale-105 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+      {/* Hero / Header Section: Shifted tightly to the top */}
+      <div className="max-w-md mx-auto w-full pt-0 pb-1 text-center relative z-10 space-y-1">
+        <div className="relative w-20 h-20 sm:w-24 sm:h-24 mx-auto block transition-transform hover:scale-105 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
           <Image 
             src="/logo-kagat.png" 
             alt="Iqra' Master Logo" 
             fill
-            sizes="112px"
+            sizes="96px"
             priority
             className="object-contain"
           />
         </div>
         
-        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white" style={{ letterSpacing: '-0.02em' }}>
+        <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-white" style={{ letterSpacing: '-0.02em' }}>
           Iqra&apos; Master
         </h1>
 
         <div className="pt-0.5 flex justify-center">
           <Link 
             href="/login"
-            className="inline-flex items-center justify-center py-2 px-6 rounded-full font-medium text-xs text-white shadow-lg transition-transform hover:scale-105 hover:opacity-90"
+            className="inline-flex items-center justify-center py-1.5 px-5 rounded-full font-medium text-xs text-white shadow-lg transition-transform hover:scale-105 hover:opacity-90"
             style={{ backgroundColor: '#0000FF', letterSpacing: '-0.01em' }}
           >
             Get Started
@@ -151,12 +151,12 @@ export default function HomePage() {
         </div>
 
         <p className="text-xs text-zinc-300 font-normal pt-0.5 leading-snug" style={{ letterSpacing: '-0.005em' }}>
-          Atau <br /> Pilih Skala di bawah untuk memulakan pembelajaran anda.
+          Pilih Skala di bawah untuk memulakan pembelajaran anda.
         </p>
       </div>
 
-      {/* Skala Horizontal Sliding Carousel with Solid Black Fill Gojes Box */}
-      <section className="max-w-4xl mx-auto w-full pt-1 pb-2 relative z-10 px-4">
+      {/* Skala Horizontal Sliding Carousel (Gojes Box directly below text) */}
+      <section className="max-w-4xl mx-auto w-full pt-1 pb-1.5 relative z-10 px-4">
         <div className="relative w-full max-w-lg mx-auto">
           {/* Gojes Box Outer Glow */}
           <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 opacity-20 blur-sm pointer-events-none" />
@@ -169,7 +169,7 @@ export default function HomePage() {
               onMouseLeave={handleMouseLeave}
               onMouseUp={handleMouseUp}
               onMouseMove={handleMouseMove}
-              className={`w-full bg-zinc-950 backdrop-blur-3xl text-white rounded-[22px] py-4 px-3 overflow-x-auto scrollbar-none shadow-[0_15px_35px_rgba(0,0,0,0.8)] border border-white/15 ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
+              className={`w-full bg-zinc-950 backdrop-blur-3xl text-white rounded-[22px] py-3 px-3 overflow-x-auto scrollbar-none shadow-[0_15px_35px_rgba(0,0,0,0.8)] border border-white/15 ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
               style={{
                 scrollbarWidth: 'none',
                 msOverflowStyle: 'none',
@@ -187,10 +187,10 @@ export default function HomePage() {
                     key={item.num}
                     href={`/skala/${item.num}`}
                     draggable={false}
-                    className="w-56 sm:w-60 bg-zinc-900/80 hover:bg-zinc-900 rounded-xl p-4 flex flex-col justify-start h-36 transition-all shadow-md group border border-white/10 shrink-0 text-center"
+                    className="w-52 sm:w-56 bg-zinc-900/80 hover:bg-zinc-900 rounded-xl p-3.5 flex flex-col justify-start h-32 transition-all shadow-md group border border-white/10 shrink-0 text-center"
                   >
                     {/* Centered Skala Title */}
-                    <h3 className="text-sm font-bold tracking-tight text-white mb-2 group-hover:text-emerald-400 transition-colors pointer-events-none">
+                    <h3 className="text-xs sm:text-sm font-bold tracking-tight text-white mb-2 group-hover:text-emerald-400 transition-colors pointer-events-none">
                       Skala {item.num}
                     </h3>
 
@@ -211,15 +211,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Bottom Section: Atau, Ujian Skala Button & Description */}
-      <div className="max-w-md mx-auto w-full pb-3 px-6 flex flex-col items-center text-center relative z-10 space-y-1.5">
-        <span className="text-xs font-medium text-zinc-400 tracking-widest uppercase">Atau</span>
+      {/* Bottom Section: Atau below Gojes box, Mula Ujian Skala Button & Description */}
+      <div className="max-w-md mx-auto w-full pb-2 px-6 flex flex-col items-center text-center relative z-10 space-y-1.5">
+        <span className="text-xs font-medium text-zinc-400">Atau</span>
         
         <div className="flex justify-center">
           <Link 
             href="/ujian-skala"
-            className="inline-flex items-center justify-center py-2 px-6 rounded-full font-medium text-xs text-white shadow-lg transition-transform hover:scale-105 hover:opacity-90"
-            style={{ backgroundColor: '#0000FF', letterSpacing: '-0.01em' }}
+            className="inline-flex items-center justify-center py-2 px-6 rounded-full font-medium text-xs text-white shadow-lg transition-transform hover:scale-105 hover:bg-blue-600/20 bg-transparent border-2"
+            style={{ borderColor: '#0000FF', letterSpacing: '-0.01em' }}
           >
             Mula Ujian Skala
           </Link>
@@ -231,7 +231,7 @@ export default function HomePage() {
       </div>
 
       {/* Footer */}
-      <footer className="w-full pt-2 pb-3 border-t border-blue-900/40 text-center text-xs text-blue-300 relative z-10 font-sans">
+      <footer className="w-full pt-2 pb-2 border-t border-blue-900/40 text-center text-xs text-blue-300 relative z-10 font-sans">
         &copy; {new Date().getFullYear()} Iqra&apos; Master By DxiaTech. All Rights Reserved.
       </footer>
     </main>

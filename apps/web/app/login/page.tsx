@@ -23,7 +23,7 @@ export default function LoginPage() {
       {/* Background Ambient Glow */}
       <div className="absolute w-96 h-96 bg-[#00472B]/30 rounded-full blur-3xl pointer-events-none top-1/4 left-1/2 -translate-x-1/2" />
 
-      {/* SVG Gradient Definition for Borders & Icons */}
+      {/* SVG Gradient Definition */}
       <svg width="0" height="0" className="absolute">
         <defs>
           <linearGradient id="themeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -34,10 +34,9 @@ export default function LoginPage() {
         </defs>
       </svg>
 
-      {/* Spacer for Top Alignment */}
       <div className="pt-6"></div>
 
-      {/* Hero / Header Section: Logo & Iqra' Master Name */}
+      {/* Hero / Header Section */}
       <div className="max-w-3xl mx-auto w-full pt-2 pb-2 text-center relative z-10 space-y-2">
         <Link 
           href="/" 
@@ -57,21 +56,32 @@ export default function LoginPage() {
         <p className="text-xs text-zinc-400">Sila log masuk untuk menyimpan rekod pencapaian anda.</p>
       </div>
 
-      {/* Central Login Container Hub with Gradient Border Glow */}
+      {/* Central Login Container Hub */}
       <section className="max-w-md mx-auto w-full pt-2 pb-12 flex-1 flex flex-col items-center justify-start relative z-10">
         <div className="relative w-full">
-          {/* Subtle Multi-Color Shadow Backing */}
           <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 opacity-20 blur-sm pointer-events-none" />
 
-          {/* Main Container Box with Theme Border Glow */}
           <div className="relative p-[1.5px] rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 w-full">
-            <div className="w-full bg-zinc-950/85 backdrop-blur-3xl text-white rounded-[22px] py-7 px-6 flex flex-col items-center gap-6 shadow-[0_15px_35px_rgba(0,0,0,0.8)] border border-white/15">
+            <div className="w-full bg-zinc-950/90 backdrop-blur-3xl text-white rounded-[22px] pt-5 pb-7 px-6 flex flex-col items-center gap-6 shadow-[0_15px_35px_rgba(0,0,0,0.8)] border border-white/15">
               
-              <span className="text-xs font-semibold tracking-wide text-zinc-300">
-                Log Masuk Akaun
-              </span>
+              {/* Header Row: Centered Title with Absolute Cancel Button (No line) */}
+              <div className="w-full relative flex items-center justify-center pb-1">
+                <span className="text-xs font-semibold tracking-wide text-zinc-300">
+                  Log Masuk Akaun
+                </span>
+                
+                <Link
+                  href="/"
+                  className="absolute right-0 w-7 h-7 rounded-full flex items-center justify-center bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white transition-all border border-white/20 shadow-sm"
+                  title="Batal / Kembali"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </Link>
+              </div>
 
-              {/* TOP: Social Logins (Google & Facebook with Proper Icons) */}
+              {/* Social Logins */}
               <div className="flex flex-col gap-3 w-full">
                 <button 
                   onClick={() => alert('Google Sign-In clicked')}
@@ -97,7 +107,7 @@ export default function LoginPage() {
                 </button>
               </div>
 
-              {/* Toggle Option for Email/Password (Uppercase class removed) */}
+              {/* Toggle Option for Email */}
               <div className="flex items-center w-full my-1 cursor-pointer" onClick={() => setShowEmailModal(!showEmailModal)}>
                 <div className="flex-grow border-t border-zinc-800"></div>
                 <span className="px-3 text-[10px] text-emerald-400 font-semibold tracking-wider hover:underline">
@@ -106,7 +116,7 @@ export default function LoginPage() {
                 <div className="flex-grow border-t border-zinc-800"></div>
               </div>
 
-              {/* COLLAPSIBLE / POPUP EMAIL FORM */}
+              {/* Email Form */}
               {showEmailModal && (
                 <form onSubmit={handleEmailLogin} className="flex flex-col gap-4 w-full bg-zinc-900/80 p-4 rounded-2xl border border-white/10 animate-fadeIn">
                   <div className="flex flex-col gap-1.5">
