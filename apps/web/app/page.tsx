@@ -6,12 +6,14 @@ import { useRef, useState, useEffect } from 'react';
 
 export default function HomePage() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
 
-  // User session state
+  // User session state & Burger menu state
   const [user, setUser] = useState<{ id: number; name: string; email: string } | null>(null);
+  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     // Check if user is logged in via localStorage
@@ -25,13 +27,28 @@ export default function HomePage() {
     }
   }, []);
 
+  // Close burger menu when clicking outside of it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowMenu(false);
+      }
+    };
+    if (showMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showMenu]);
+
   const handleLogout = () => {
     localStorage.removeItem('iqra_user');
     setUser(null);
     window.location.href = '/';
   };
 
-  // Mouse drag handlers for desktop smooth sliding
+  // Mouse drag handlers for desktop smooth sliding across the entire Gojes box
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
     setStartX(e.pageX - (scrollRef.current?.offsetLeft || 0));
@@ -104,7 +121,7 @@ export default function HomePage() {
 
   return (
     <main 
-      className="min-h-screen text-white flex flex-col items-center justify-start relative px-4 overflow-x-hidden"
+      className="min-h-screen text-white flex flex-col justify-between relative px-4 overflow-x-hidden"
       style={{ 
         background: 'linear-gradient(to bottom, #0000FF 0%, #000000 30%, #000000 70%, #0000FF 100%)',
         fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
@@ -145,17 +162,51 @@ export default function HomePage() {
 
         <div className="flex items-center gap-2">
           {user ? (
-            <div className="relative w-10 h-10 rounded-full overflow-hidden p-[1.5px] flex items-center justify-center transition-transform hover:scale-105">
-              <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,#EF4444,#F97316,#EF4444)] animate-spin-slow" />
-              <button
-                onClick={handleLogout}
-                className="relative w-full h-full rounded-full bg-zinc-950/90 hover:bg-zinc-900 text-red-400 hover:text-red-300 flex items-center justify-center transition-all shadow-md cursor-pointer"
-                title="Log Keluar"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9" />
-                </svg>
-              </button>
+            <div className="relative" ref={menuRef}>
+              <div className="relative w-10 h-10 rounded-full overflow-hidden p-[1.5px] flex items-center justify-center transition-transform hover:scale-105">
+                <div className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,#3B82F6,#FACC15,#EF4444,#3B82F6)] animate-spin-slow" />
+                <button
+                  onClick={() => setShowMenu(!showMenu)}
+                  className="relative w-full h-full rounded-full bg-zinc-950/90 hover:bg-zinc-900 text-zinc-200 hover:text-white flex items-center justify-center transition-all shadow-md cursor-pointer"
+                  title="Menu"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                </button>
+              </div>
+
+              {showMenu && (
+                <div className="absolute right-0 mt-2 w-48 bg-zinc-950 border border-white/15 rounded-2xl shadow-2xl py-2 z-35 backdrop-blur-3xl animate-fadeIn">
+                  <Link 
+                    href="/account" 
+                    className="flex items-center gap-3 px-4 py-2.5 text-xs text-zinc-200 hover:bg-zinc-900 transition-colors"
+                  >
+                    <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    Akaun Saya
+                  </Link>
+                  
+                  <Link 
+                    href="/pencapaian" 
+                    className="flex items-center gap-3 px-4 py-2.5 text-xs text-zinc-200 hover:bg-zinc-900 transition-colors"
+                  >
+                    <svg className="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                    Pencapaian
+                  </Link>
+
+                  <div className="border-t border-zinc-800 my-1"></div>
+
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-xs text-red-400 hover:bg-zinc-900 transition-colors text-left cursor-pointer"
+                  >
+                    <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5.636 5.636a9 9 0 1 0 12.728 0M12 3v9" />
+                    </svg>
+                    Log Keluar
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <div className="relative w-10 h-10 rounded-full overflow-hidden p-[1.5px] flex items-center justify-center transition-transform hover:scale-105">
@@ -175,7 +226,7 @@ export default function HomePage() {
       </div>
 
       {/* Main Content Area */}
-      <div className="w-full max-w-lg mx-auto flex flex-col items-center relative z-15 space-y-3 pt-2 pb-8">
+      <div className="w-full max-w-lg mx-auto flex flex-col items-center relative z-15 space-y-3 pt-2 pb-24 flex-1">
         
         {/* Hero / Header Section */}
         <div className="w-full text-center space-y-1.5">
@@ -207,11 +258,11 @@ export default function HomePage() {
           )}
 
           <p className="text-xs text-zinc-300 font-normal pt-1 leading-snug" style={{ letterSpacing: '-0.005em' }}>
-            {user ? 'Selamat kembali! Pilih Skala di bawah untuk meneruskan pembelajaran.' : 'Pilih Skala di bawah untuk memulakan pembelajaran anda.'}
+            {user ? 'Selamat kembali!' : 'Selamat datang!'}
           </p>
         </div>
 
-        {/* Skala Horizontal Sliding Carousel with Spinning Gojes Border */}
+        {/* Skala Horizontal Sliding Carousel with Border Beam */}
         <section className="w-full pt-1 pb-1 relative z-10">
           <div className="relative w-full">
             {/* Spinning Glow Backdrop */}
@@ -224,36 +275,46 @@ export default function HomePage() {
               <div className="absolute inset-[-150%] bg-[conic-gradient(from_0deg,#3B82F6,#FACC15,#EF4444,#3B82F6)] animate-spin-slow" />
               
               <div 
-                ref={scrollRef}
                 onMouseDown={handleMouseDown}
                 onMouseLeave={handleMouseLeave}
                 onMouseUp={handleMouseUp}
                 onMouseMove={handleMouseMove}
-                className={`relative w-full bg-zinc-950 backdrop-blur-3xl text-white rounded-[22px] py-3 px-3 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] border border-white/10 ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
+                className={`relative w-full bg-zinc-950 backdrop-blur-3xl text-white rounded-[22px] py-4 px-0 flex flex-col gap-3 overflow-hidden border border-white/10 ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
               >
-                <div className="flex gap-3 w-max py-1">
-                  {skalaData.map((item) => (
-                    <Link
-                      key={item.num}
-                      href={`/skala/${item.num}`}
-                      draggable={false}
-                      className="w-52 sm:w-56 bg-zinc-900/80 hover:bg-zinc-900 rounded-xl p-3.5 flex flex-col justify-start h-32 transition-all shadow-md group border border-white/10 shrink-0 text-center"
-                    >
-                      <h3 className="text-xs sm:text-sm font-bold tracking-tight text-white mb-2 group-hover:text-emerald-400 transition-colors pointer-events-none">
-                        Skala {item.num}
-                      </h3>
+                
+                <p className="text-xs text-zinc-300 font-normal text-center leading-snug pointer-events-none px-4" style={{ letterSpacing: '-0.005em' }}>
+                  Pilih Skala di bawah untuk meneruskan pembelajaran.
+                </p>
 
-                      <ul className="space-y-1 text-left pointer-events-none mx-auto w-full">
-                        {item.bullets.map((bullet, idx) => (
-                          <li key={idx} className="text-[10px] sm:text-[11px] text-zinc-300 leading-tight flex items-start">
-                            <span className="mr-1.5 text-blue-400">•</span>
-                            <span className="line-clamp-1">{bullet}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </Link>
-                  ))}
+                <div 
+                  ref={scrollRef}
+                  className="w-full overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                >
+                  <div className="flex gap-3 w-max py-1 px-3">
+                    {skalaData.map((item) => (
+                      <Link
+                        key={item.num}
+                        href={`/skala/${item.num}`}
+                        draggable={false}
+                        className="w-52 sm:w-56 bg-zinc-900/80 hover:bg-zinc-900 rounded-xl p-3.5 flex flex-col justify-start h-32 transition-all shadow-md group border border-white/10 shrink-0 text-center"
+                      >
+                        <h3 className="text-xs sm:text-sm font-bold tracking-tight text-white mb-2 group-hover:text-emerald-400 transition-colors pointer-events-none">
+                          Skala {item.num}
+                        </h3>
+
+                        <ul className="space-y-1 text-left pointer-events-none mx-auto w-full">
+                          {item.bullets.map((bullet, idx) => (
+                            <li key={idx} className="text-[10px] sm:text-[11px] text-zinc-300 leading-tight flex items-start">
+                              <span className="mr-1.5 text-blue-400">•</span>
+                              <span className="line-clamp-1">{bullet}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
+
               </div>
             </div>
           </div>
@@ -280,8 +341,8 @@ export default function HomePage() {
 
       </div>
 
-      {/* Footer */}
-      <footer className="w-full mt-auto pt-3 pb-3 border-t border-blue-900/40 text-center text-xs text-blue-300 relative z-10 font-sans shrink-0">
+      {/* Footer Locked at the Very Bottom */}
+      <footer className="w-full pt-3 pb-3 border-t border-blue-900/40 text-center text-xs text-blue-300 relative z-10 font-sans shrink-0">
         &copy; {new Date().getFullYear()} Iqra&apos; Master By DxiaTech. All Rights Reserved.
       </footer>
     </main>

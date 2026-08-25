@@ -40,9 +40,20 @@ export default function LoginPage() {
 
   return (
     <main 
-      className="min-h-screen text-white flex flex-col justify-between relative px-4 font-sans antialiased"
+      className="min-h-screen text-white flex flex-col justify-between relative px-4 font-sans antialiased overflow-x-hidden"
       style={{ background: 'linear-gradient(to bottom, #00472B 0%, #000000 30%, #000000 70%, #00472B 100%)' }}
     >
+      {/* Global Spin Animation Styles */}
+      <style jsx global>{`
+        @keyframes spinGradient {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+          animation: spinGradient 6s linear infinite;
+        }
+      `}</style>
+
       <div className="absolute w-96 h-96 bg-[#00472B]/30 rounded-full blur-3xl pointer-events-none top-1/4 left-1/2 -translate-x-1/2" />
 
       {popupMessage && (
@@ -82,10 +93,16 @@ export default function LoginPage() {
 
       <section className="max-w-md mx-auto w-full pt-2 pb-12 flex-1 flex flex-col items-center justify-start relative z-10">
         <div className="relative w-full">
-          <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 opacity-20 blur-sm pointer-events-none" />
+          {/* Spinning Glow Backdrop */}
+          <div className="absolute -inset-1 rounded-3xl overflow-hidden opacity-30 blur-md pointer-events-none">
+            <div className="absolute inset-[-150%] bg-[conic-gradient(from_0deg,#3B82F6,#FACC15,#EF4444,#3B82F6)] animate-spin-slow" />
+          </div>
 
-          <div className="relative p-[1.5px] rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 w-full">
-            <div className="w-full bg-zinc-950/90 backdrop-blur-3xl text-white rounded-[22px] pt-5 pb-7 px-6 flex flex-col items-center gap-6 shadow-[0_15px_35px_rgba(0,0,0,0.8)] border border-white/15">
+          {/* Spinning Border Container */}
+          <div className="relative p-[1.5px] rounded-3xl overflow-hidden w-full shadow-[0_15px_35px_rgba(0,0,0,0.8)]">
+            <div className="absolute inset-[-150%] bg-[conic-gradient(from_0deg,#3B82F6,#FACC15,#EF4444,#3B82F6)] animate-spin-slow" />
+
+            <div className="relative w-full bg-zinc-950/95 backdrop-blur-3xl text-white rounded-[22px] pt-5 pb-7 px-6 flex flex-col items-center gap-6 border border-white/10">
               
               <div className="w-full relative flex items-center justify-center pb-1">
                 <span className="text-xs font-semibold tracking-wide text-zinc-300">

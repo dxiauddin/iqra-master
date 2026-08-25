@@ -1,199 +1,73 @@
 'use client';
 
-import { useState, use } from 'react';
+import { use } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
 interface PageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string; modNum: string }>;
 }
 
-export default function SkalaTestPage({ params }: PageProps) {
-  const { id } = use(params);
-
-  // Dynamic theme configuration based on exact custom color codes
-  const getTheme = (skalaId: string) => {
-    switch (skalaId) {
-      case '1': // Green Theme (#00472B)
-        return {
-          bgGradient: 'linear-gradient(to bottom, #00472B 0%, #000000 30%, #000000 70%, #00472B 100%)',
-          ambientGlow: 'bg-[#00472B]/30',
-          footerBorder: 'border-emerald-900/40',
-          footerText: 'text-emerald-300/80',
-        };
-      case '2': // Purple Theme (#54009E)
-        return {
-          bgGradient: 'linear-gradient(to bottom, #54009E 0%, #000000 30%, #000000 70%, #54009E 100%)',
-          ambientGlow: 'bg-[#54009E]/30',
-          footerBorder: 'border-purple-900/40',
-          footerText: 'text-purple-300/80',
-        };
-      case '3': // Red Theme (#9E0000)
-        return {
-          bgGradient: 'linear-gradient(to bottom, #9E0000 0%, #000000 30%, #000000 70%, #9E0000 100%)',
-          ambientGlow: 'bg-[#9E0000]/30',
-          footerBorder: 'border-red-900/40',
-          footerText: 'text-red-300/80',
-        };
-      case '4': // Yellow Theme (#FFF100)
-        return {
-          bgGradient: 'linear-gradient(to bottom, #FFF100 0%, #000000 30%, #000000 70%, #FFF100 100%)',
-          ambientGlow: 'bg-[#FFF100]/20',
-          footerBorder: 'border-yellow-900/40',
-          footerText: 'text-yellow-200/80',
-        };
-      case '5': // White Theme
-        return {
-          bgGradient: 'linear-gradient(to bottom, #FFFFFF 0%, #000000 30%, #000000 70%, #FFFFFF 100%)',
-          ambientGlow: 'bg-white/15',
-          footerBorder: 'border-zinc-800',
-          footerText: 'text-zinc-400',
-        };
-      case '6': // Pink Theme (#FF00F7)
-        return {
-          bgGradient: 'linear-gradient(to bottom, #FF00F7 0%, #000000 30%, #000000 70%, #FF00F7 100%)',
-          ambientGlow: 'bg-[#FF00F7]/25',
-          footerBorder: 'border-pink-900/40',
-          footerText: 'text-pink-300/80',
-        };
-      default: // Fallback Blue
-        return {
-          bgGradient: 'linear-gradient(to bottom, #0000FF 0%, #000000 30%, #000000 70%, #0000FF 100%)',
-          ambientGlow: 'bg-blue-500/15',
-          footerBorder: 'border-blue-900/40',
-          footerText: 'text-blue-300',
-        };
-    }
-  };
-
-  const theme = getTheme(id);
-
-  // Skala test score percentage state
-  const [scorePercent, setScorePercent] = useState(0);
+export default function ModuleTestPage({ params }: PageProps) {
+  const { id, modNum } = use(params);
 
   return (
     <main 
       className="min-h-screen text-white flex flex-col justify-between relative px-4 font-sans antialiased"
-      style={{ background: theme.bgGradient }}
+      style={{ background: 'linear-gradient(to bottom, #0000FF 0%, #000000 30%, #000000 70%, #0000FF 100%)' }}
     >
-      
       {/* Background Ambient Glow */}
-      <div className={`absolute w-96 h-96 ${theme.ambientGlow} rounded-full blur-3xl pointer-events-none top-1/4 left-1/2 -translate-x-1/2`} />
+      <div className="absolute w-96 h-96 bg-blue-500/15 rounded-full blur-3xl pointer-events-none top-1/4 left-1/2 -translate-x-1/2" />
 
-      {/* SVG Gradient Definition for Circular Progress Bar */}
-      <svg width="0" height="0" className="absolute">
-        <defs>
-          <linearGradient id="themeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#3B82F6" />
-            <stop offset="50%" stopColor="#FACC15" />
-            <stop offset="100%" stopColor="#EF4444" />
-          </linearGradient>
-        </defs>
-      </svg>
-
-      {/* Top Bar: Circular Progress Ring on Top Left */}
-      <div className="max-w-4xl mx-auto w-full pt-6 px-4 flex justify-between items-start relative z-20">
-        
-        {/* Top Left: Larger Circular Ring with "Markah" Below */}
-        <div className="flex flex-col items-start">
-          <div className="relative w-16 h-16 flex items-center justify-center drop-shadow-lg">
-            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-              <path
-                className="text-white/10"
-                strokeWidth="3.2"
-                stroke="currentColor"
-                fill="none"
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              />
-              <path
-                className="transition-all duration-500 ease-out"
-                stroke="url(#themeGradient)"
-                strokeWidth="3.2"
-                strokeDasharray="100"
-                strokeDashoffset={100 - scorePercent}
-                strokeLinecap="round"
-                fill="none"
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              />
-            </svg>
-            <span className="absolute text-xs font-bold font-mono text-white">
-              {scorePercent}%
-            </span>
-          </div>
-          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 mt-1 pl-1">
-            Markah
-          </span>
-        </div>
-
-      </div>
-
-      {/* Hero / Header Section with Clickable Logo Back to Skala */}
-      <div className="max-w-3xl mx-auto w-full pt-2 pb-2 text-center relative z-10 space-y-1">
+      {/* Top Bar: Back Link */}
+      <div className="max-w-xl mx-auto w-full pt-6 px-4 flex justify-between items-center relative z-20">
         <Link 
-          href={`/skala/${id}`}
-          className="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto block transition-transform hover:scale-105 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]"
-          title={`Kembali ke Skala ${id}`}
+          href={`/skala/${id}/module/${modNum}`} 
+          className="text-xs text-zinc-400 hover:text-white transition-colors"
         >
-          <Image 
-            src="/logo-kagat.png" 
-            alt="Iqra' Master Logo" 
-            fill
-            sizes="112px"
-            priority
-            className="object-contain"
-          />
+          &larr; Kembali ke Modul {modNum}
         </Link>
-
-        <span className="text-xs font-semibold text-zinc-400 uppercase tracking-widest block pt-1">
-          Skala {id} &bull; Ujian Keseluruhan
+        <span className="text-xs font-semibold text-yellow-400 tracking-wide">
+          Ujian Modul {modNum} (Skala {id})
         </span>
-
-        {/* Heading Font Size & Weight Matched */}
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">Ujian Skala {id}</h1>
-        <p className="text-xs text-zinc-400">Sila jawab soalan peperiksaan akhir Skala {id} dengan teliti.</p>
       </div>
 
-      {/* Central Interactive Content Hub with Consistent Gradient Border Glow */}
-      <section className="max-w-2xl mx-auto w-full pt-2 pb-12 flex-1 flex flex-col items-center justify-start relative z-10">
-        <div className="relative w-full max-w-lg">
-          {/* Subtle Multi-Color Shadow Backing */}
-          <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 opacity-20 blur-sm pointer-events-none" />
-
-          {/* Main Container Box with Theme Border Glow */}
-          <div className="relative p-[1.5px] rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 w-full">
-            <div className="w-full bg-zinc-950/85 backdrop-blur-3xl text-white rounded-[22px] py-7 px-6 flex flex-col items-center gap-6 shadow-[0_15px_35px_rgba(0,0,0,0.8)] border border-white/15">
-              
-              <span className="text-xs font-semibold tracking-wide text-zinc-300">
-                Soalan Ujian Skala {id} (1 / 10)
-              </span>
-
-              {/* Assessment Question Mock Container */}
-              <div className="w-full bg-zinc-900/90 border border-white/15 rounded-2xl p-6 text-center space-y-4">
-                <p className="text-sm text-zinc-200 font-medium">Ujian Penilaian Komprehensif Skala {id}</p>
-                <div className="text-4xl font-bold font-arabic py-2 text-white">ب</div>
-                <div className="grid grid-cols-2 gap-3 pt-2">
-                  <button 
-                    onClick={() => setScorePercent(100)}
-                    className="p-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 border border-white/10 text-xs font-semibold transition-all"
-                  >
-                    A. Ba
-                  </button>
-                  <button 
-                    onClick={() => setScorePercent(0)}
-                    className="p-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 border border-white/10 text-xs font-semibold transition-all"
-                  >
-                    B. Ta
-                  </button>
-                </div>
-              </div>
-
-            </div>
+      {/* Main Content Area */}
+      <div className="w-full max-w-lg mx-auto flex flex-col items-center relative z-15 space-y-4 pt-4 pb-24 flex-1">
+        
+        <div className="w-full bg-zinc-950/85 backdrop-blur-3xl text-white rounded-[22px] py-8 px-6 border border-white/15 shadow-2xl">
+          <div className="mb-4">
+            <span className="text-[10px] uppercase tracking-wider font-semibold text-yellow-400 bg-yellow-500/10 px-2.5 py-1 rounded-full">
+              Penilaian Modul {modNum}
+            </span>
+            <h2 className="text-base sm:text-lg font-bold mt-3 text-white">
+              Ujian Penguasaan Pembelajaran Modul {modNum}
+            </h2>
+            <p className="text-xs text-zinc-400 mt-1">
+              Jawab soalan di bawah untuk menguji kefahaman anda bagi modul ini.
+            </p>
           </div>
+
+          {/* Test Questions Placeholder / Interactive Flow */}
+          <div className="py-12 text-center text-zinc-400 text-xs border border-dashed border-zinc-800 rounded-xl my-6">
+            [ Soalan Interaktif Ujian Modul {modNum} untuk Skala {id} dipaparkan di sini ]
+          </div>
+
+          <button
+            onClick={() => {
+              alert(`Tahniah! Anda telah berjaya menghantar Ujian Modul ${modNum}.`);
+              window.location.href = `/skala/${id}`;
+            }}
+            className="w-full py-2.5 rounded-full text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-lg transition-transform hover:scale-105 cursor-pointer"
+          >
+            Hantar Jawapan Modul
+          </button>
         </div>
-      </section>
+
+      </div>
 
       {/* Footer */}
-      <footer className={`w-full pt-4 pb-4 border-t ${theme.footerBorder} text-center text-xs ${theme.footerText} relative z-10 font-sans`}>
+      <footer className="w-full pt-3 pb-3 border-t border-blue-900/40 text-center text-xs text-blue-300 relative z-10 shrink-0 font-sans">
         &copy; {new Date().getFullYear()} Iqra&apos; Master By DxiaTech. All Rights Reserved.
       </footer>
     </main>

@@ -30,6 +30,7 @@ export async function handleLogin(formData: FormData) {
         data: {
           email,
           passwordHash: hashedPassword,
+          name: email.split('@')[0], // Default name from email prefix
         },
       });
     } else if (user.passwordHash) {
@@ -62,5 +63,100 @@ export async function handleLogin(formData: FormData) {
   } catch (err: any) {
     console.error('Authentication error:', err);
     return { error: err.message || 'An internal authentication error occurred.' };
+  }
+}
+
+// --- MODULE PROGRESS ACTIONS (Neon Database Sync) ---
+
+export async function saveModuleProgress(userId: number, skalaId: number, moduleNum: number, completedCards: string[], progressPercent: number) {
+  if (!userId) {
+    return { error: 'Unauthorized user.' };
+  }
+
+  try {
+    await db.$executeRaw`
+      INSERT INTO user_module_progress (user_id, skala_id, module_num, completed_cards, progress_percent, updated_at)
+      VALUES (${userId}, ${skalaId}, ${moduleNum}, ${completedCards}, ${progressPercent}, NOW())
+      ON CONFLICT (user_id, skala_id, module_num) 
+      DO UPDATE SET 
+        completed_cards = EXCLUDED.completed_cards, 
+        progress_percent = EXCLUDED.progress_percent, 
+        updated_at = NOW();
+    `;
+
+    return { success: true };
+  } catch (err: any) {
+    console.error('Failed to save module progress:', err);
+    return { error: err.message || 'Database error while saving progress.' };
+  }
+}
+
+export async function getModuleProgress(userId: number, skalaId: number, moduleNum: number) {
+  if (!userId) {
+    return { completed_cards: [], progress_percent: 0 };
+  }
+
+  try {
+    const result: any[] = await db.$queryRaw`
+      SELECT completed_cards, progress_percent 
+      FROM user_module_progress 
+      WHERE user_id = ${userId} AND skala_id = ${skalaId} AND module_num = ${moduleNum}
+    `;
+
+    if (result && result.length > 0) {
+      return {
+        completed_cards: result[0].completed_cards || [],
+        progress_percent: result[0].progress_percent || 0,
+      };
+    }
+
+    return { completed_cards: [], progress_percent: 0 };
+  } catch (err) {
+    console.error('Failed to fetch module progress:', err);
+    return { completed_cards: [], progress_percent: 0 };
+  }
+}
+
+// --- AGGREGATE SKALA PROGRESS ACTION ---
+
+export async function getSkalaProgress(userId: number, skalaId: number, totalModules: number = 10) {
+  if (!userId) {
+    return { overall_percent: 0, current_module: 1 };
+  }
+
+  try {
+    const results: any[] = await db.$queryRaw`
+      SELECT module_num, progress_percent 
+      FROM user_module_progress 
+      WHERE user_id = ${userId} AND skala_id = ${skalaId}
+    `;
+
+    let totalSum = 0;
+    const progressMap: Record<number, number> = {};
+
+    results.forEach((row) => {
+      progressMap[row.module_num] = row.progress_percent;
+      totalSum += row.progress_percent;
+    });
+
+    // Calculate aggregate average across all total modules (e.g., divided by 10)
+    const overallPercent = Math.round(totalSum / totalModules);
+
+    // Find the first module that is not yet 100% complete
+    let activeModule = 1;
+    for (let i = 1; i <= totalModules; i++) {
+      if ((progressMap[i] || 0) < 100) {
+        activeModule = i;
+        break;
+      }
+      if (i === totalModules && (progressMap[i] || 0) === 100) {
+        activeModule = totalModules;
+      }
+    }
+
+    return { overall_percent: overallPercent, current_module: activeModule };
+  } catch (err) {
+    console.error('Failed to fetch Skala aggregate progress:', err);
+    return { overall_percent: 0, current_module: 1 };
   }
 }

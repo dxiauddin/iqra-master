@@ -1,8 +1,8 @@
 'use client';
 
-import { use } from 'react';
+import { useState, use, useRef, useEffect, useTransition } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { getSkalaProgress } from '@/app/actions';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -10,6 +10,63 @@ interface PageProps {
 
 export default function SkalaDashboardPage({ params }: PageProps) {
   const { id } = use(params);
+  const [isPending, startTransition] = useTransition();
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  // State for aggregate multi-module progress & active module indicator
+  const [overallPercent, setOverallPercent] = useState(0);
+  const [currentModule, setCurrentModule] = useState(1);
+  const [moduleProgressMap, setModuleProgressMap] = useState<Record<number, number>>({});
+
+  // Locked module popup alert state
+  const [lockedPopupModule, setLockedPopupModule] = useState<number | null>(null);
+
+  // Fetch true multi-module aggregated progress from Neon Database on mount
+  useEffect(() => {
+    async function fetchSkalaAggregateProgress() {
+      try {
+        const currentUserId = 1; // Match user session ID
+        const skalaNum = parseInt(id, 10);
+        const totalModulesCount = 10; // Total modules in this Skala
+
+        const data = await getSkalaProgress(currentUserId, skalaNum, totalModulesCount);
+        
+        if (data) {
+          setOverallPercent(data.overall_percent);
+          setCurrentModule(data.current_module);
+          
+          const map: Record<number, number> = {};
+          if (data.overall_percent > 0) {
+            map[1] = data.current_module > 1 ? 100 : data.overall_percent * 10; 
+          }
+          setModuleProgressMap(map);
+        }
+      } catch (err) {
+        console.error('Failed to fetch aggregate progress from Neon database:', err);
+      }
+    }
+
+    startTransition(() => {
+      fetchSkalaAggregateProgress();
+    });
+  }, [id]);
+
+  // Handle click on module card to enforce locking rules
+  const handleModuleClick = (e: React.MouseEvent, modNum: number) => {
+    if (modNum > 1) {
+      const prevModuleProgress = moduleProgressMap[modNum - 1] || 0;
+      
+      if (prevModuleProgress < 100 && currentModule < modNum) {
+        e.preventDefault();
+        setLockedPopupModule(modNum);
+        return;
+      }
+    }
+  };
 
   // Dynamic theme configuration based on exact custom color codes
   const getTheme = (skalaId: string) => {
@@ -21,7 +78,6 @@ export default function SkalaDashboardPage({ params }: PageProps) {
           hoverColor: 'group-hover:text-emerald-400',
           testBtn: 'bg-[#00472B]/30 hover:bg-[#00472B]/50 text-emerald-200 border-emerald-500/40',
           footerBorder: 'border-emerald-900/40',
-          footerText: 'text-emerald-300/80',
         };
       case '2': // Purple Theme (#54009E)
         return {
@@ -30,7 +86,6 @@ export default function SkalaDashboardPage({ params }: PageProps) {
           hoverColor: 'group-hover:text-purple-300',
           testBtn: 'bg-[#54009E]/30 hover:bg-[#54009E]/50 text-purple-200 border-purple-500/40',
           footerBorder: 'border-purple-900/40',
-          footerText: 'text-purple-300/80',
         };
       case '3': // Red Theme (#9E0000)
         return {
@@ -39,7 +94,6 @@ export default function SkalaDashboardPage({ params }: PageProps) {
           hoverColor: 'group-hover:text-red-400',
           testBtn: 'bg-[#9E0000]/30 hover:bg-[#9E0000]/50 text-red-200 border-red-500/40',
           footerBorder: 'border-red-900/40',
-          footerText: 'text-red-300/80',
         };
       case '4': // Yellow Theme (#FFF100)
         return {
@@ -48,7 +102,6 @@ export default function SkalaDashboardPage({ params }: PageProps) {
           hoverColor: 'group-hover:text-yellow-300',
           testBtn: 'bg-[#FFF100]/20 hover:bg-[#FFF100]/30 text-yellow-200 border-yellow-500/40',
           footerBorder: 'border-yellow-900/40',
-          footerText: 'text-yellow-200/80',
         };
       case '5': // White Theme
         return {
@@ -57,7 +110,6 @@ export default function SkalaDashboardPage({ params }: PageProps) {
           hoverColor: 'group-hover:text-white',
           testBtn: 'bg-white/20 hover:bg-white/30 text-white border-white/40',
           footerBorder: 'border-zinc-800',
-          footerText: 'text-zinc-400',
         };
       case '6': // Pink Theme (#FF00F7)
         return {
@@ -66,7 +118,6 @@ export default function SkalaDashboardPage({ params }: PageProps) {
           hoverColor: 'group-hover:text-pink-300',
           testBtn: 'bg-[#FF00F7]/25 hover:bg-[#FF00F7]/40 text-pink-200 border-pink-500/40',
           footerBorder: 'border-pink-900/40',
-          footerText: 'text-pink-300/80',
         };
       default: // Fallback Blue
         return {
@@ -75,28 +126,68 @@ export default function SkalaDashboardPage({ params }: PageProps) {
           hoverColor: 'group-hover:text-blue-400',
           testBtn: 'bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border-blue-500/40',
           footerBorder: 'border-blue-900/40',
-          footerText: 'text-blue-300',
         };
     }
   };
 
   const theme = getTheme(id);
 
-  // Grouped module rows: 1,2,3 | 4,5,6 | 7,8,9 | 10
-  const row1 = [1, 2, 3];
-  const row2 = [4, 5, 6];
-  const row3 = [7, 8, 9];
-  const row4 = [10];
+  // Mouse drag handlers for desktop smooth sliding across the module carousel
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setStartX(e.pageX - (scrollRef.current?.offsetLeft || 0));
+    setScrollLeft(scrollRef.current?.scrollLeft || 0);
+  };
 
-  // Skala progress percentage
-  const progressPercent = 0;
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - (scrollRef.current?.offsetLeft || 0);
+    const walk = (x - startX) * 1.5;
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft = scrollLeft - walk;
+    }
+  };
+
+  // 10 Modules data with precise custom curriculum subtitles
+  const modulesData = [
+    { num: 1, title: 'Modul 1', subtitle: 'Mengenal huruf hijaiyah' },
+    { num: 2, title: 'Modul 2', subtitle: 'Mengenal baris atas, bawah dan depan' },
+    { num: 3, title: 'Modul 3', subtitle: 'Implimentasi baris atas, bawah dan depan' },
+    { num: 4, title: 'Modul 4', subtitle: 'Implimentasi baris atas, bawah dan depan' },
+    { num: 5, title: 'Modul 5', subtitle: 'Implimentasi baris atas, bawah dan depan' },
+    { num: 6, title: 'Modul 6', subtitle: 'Implimentasi baris atas, bawah dan depan' },
+    { num: 7, title: 'Modul 7', subtitle: 'Implimentasi baris atas, bawah dan depan' },
+    { num: 8, title: 'Modul 8', subtitle: 'Implimentasi baris atas, bawah dan depan' },
+    { num: 9, title: 'Modul 9', subtitle: 'Implimentasi baris atas, bawah dan depan' },
+    { num: 10, title: 'Modul 10', subtitle: 'Implimentasi baris atas, bawah dan depan' },
+  ];
 
   return (
     <main 
-      className="min-h-screen text-white flex flex-col justify-between relative px-4 font-sans antialiased"
+      className="min-h-screen text-white flex flex-col justify-between relative px-4 overflow-x-hidden font-sans antialiased"
       style={{ background: theme.bgGradient }}
     >
       
+      {/* Global Spin Animation Styles */}
+      <style jsx global>{`
+        @keyframes spinGradient {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+          animation: spinGradient 6s linear infinite;
+        }
+      `}</style>
+
       {/* Background Ambient Glow */}
       <div className={`absolute w-96 h-96 ${theme.ambientGlow} rounded-full blur-3xl pointer-events-none top-1/4 left-1/2 -translate-x-1/2`} />
 
@@ -111,12 +202,14 @@ export default function SkalaDashboardPage({ params }: PageProps) {
         </defs>
       </svg>
 
-      {/* Top Bar: Larger Circular Progress + Pencapaian label below ring (Top Left) & Ujian Skala Button (Top Right) */}
-      <div className="max-w-4xl mx-auto w-full pt-6 px-4 flex justify-between items-start relative z-20">
+      {/* Main Content Area */}
+      <div className="w-full max-w-lg mx-auto flex flex-col items-center relative z-15 space-y-3 pt-6 pb-24 flex-1">
         
-        {/* Top Left: Bigger Progress Ring with "Pencapaian" placed right below */}
-        <div className="flex flex-col items-start">
-          <div className="relative w-16 h-16 flex items-center justify-center drop-shadow-lg">
+        {/* Hero / Header Section with Ring Pencapaian % and Active Module Indicator */}
+        <div className="w-full text-center space-y-2 flex flex-col items-center">
+          
+          {/* Main Percentage Ring with Professional Active Status Label Inside */}
+          <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center drop-shadow-2xl mb-1">
             <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
               <path
                 className="text-white/10"
@@ -130,139 +223,179 @@ export default function SkalaDashboardPage({ params }: PageProps) {
                 stroke="url(#themeGradient)"
                 strokeWidth="3.2"
                 strokeDasharray="100"
-                strokeDashoffset={100 - progressPercent}
+                strokeDashoffset={100 - overallPercent}
                 strokeLinecap="round"
                 fill="none"
                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
               />
             </svg>
-            <span className="absolute text-xs font-bold font-mono text-white">
-              {progressPercent}%
-            </span>
+            
+            {/* Inner Ring Text: Status label on top, Active Module in the middle, Percentage below */}
+            <div className="absolute flex flex-col items-center justify-center text-center">
+              <span className="text-[8px] uppercase tracking-widest font-semibold text-white">
+                Sedang Belajar
+              </span>
+              <span className="text-[10px] sm:text-xs uppercase tracking-wider font-extrabold text-emerald-400">
+                Modul {currentModule}
+              </span>
+              <span className="text-xs sm:text-sm font-bold font-mono text-white flex items-center gap-1">
+                {isPending ? (
+                  <span className="w-2 h-2 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  `${overallPercent}%`
+                )}
+              </span>
+            </div>
           </div>
-          <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 mt-1 pl-1">
-            Pencapaian
-          </span>
+          
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white" style={{ letterSpacing: '-0.02em' }}>
+            Skala {id}
+          </h1>
+
+          {/* Bulleted Subtitle List */}
+          <ul className="text-xs text-zinc-300 font-normal pt-1 space-y-1 text-left max-w-xs mx-auto" style={{ letterSpacing: '-0.005em' }}>
+            <li className="flex items-center">
+              <span className="mr-2 text-blue-400">•</span>
+              <span>Mengenal huruf hijaiyah</span>
+            </li>
+            <li className="flex items-center">
+              <span className="mr-2 text-blue-400">•</span>
+              <span>Mengenal baris atas, bawah dan depan</span>
+            </li>
+          </ul>
         </div>
 
-        {/* Top Right: Ujian Skala Button */}
-        <div className="relative">
-          <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 blur-[2px] opacity-25 pointer-events-none" />
-          <div className="relative p-[1.5px] rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 transition-transform hover:scale-105">
-            <Link
+        {/* Modules Horizontal Sliding Carousel with Border Beam */}
+        <section className="w-full pt-2 pb-1 relative z-10">
+          <div className="relative w-full">
+            {/* Spinning Glow Backdrop */}
+            <div className="absolute -inset-1 rounded-3xl overflow-hidden opacity-30 blur-md pointer-events-none">
+              <div className="absolute inset-[-150%] bg-[conic-gradient(from_0deg,#3B82F6,#FACC15,#EF4444,#3B82F6)] animate-spin-slow" />
+            </div>
+
+            {/* Spinning Border Container */}
+            <div className="relative p-[1.5px] rounded-3xl overflow-hidden w-full shadow-[0_15px_35px_rgba(0,0,0,0.8)]">
+              <div className="absolute inset-[-150%] bg-[conic-gradient(from_0deg,#3B82F6,#FACC15,#EF4444,#3B82F6)] animate-spin-slow" />
+              
+              {/* Entire Box Draggable & Styled */}
+              <div 
+                onMouseDown={handleMouseDown}
+                onMouseLeave={handleMouseLeave}
+                onMouseUp={handleMouseUp}
+                onMouseMove={handleMouseMove}
+                className={`relative w-full bg-zinc-950 backdrop-blur-3xl text-white rounded-[22px] py-4 px-0 flex flex-col gap-3 overflow-hidden border border-white/10 ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
+              >
+                
+                {/* Pinned Instruction Text */}
+                <p className="text-xs text-zinc-300 font-normal text-center leading-snug pointer-events-none px-4" style={{ letterSpacing: '-0.005em' }}>
+                  Pilih modul pembelajaran.
+                </p>
+
+                {/* Horizontally Scrolling Cards Container */}
+                <div 
+                  ref={scrollRef}
+                  className="w-full overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                >
+                  <div className="flex gap-3 w-max py-1 px-3">
+                    {modulesData.map((mod) => {
+                      const isLocked = mod.num > 1 && mod.num > currentModule && (moduleProgressMap[mod.num - 1] || 0) < 100;
+                      return (
+                        <Link
+                          key={mod.num}
+                          href={`/skala/${id}/module/${mod.num}`}
+                          onClick={(e) => handleModuleClick(e, mod.num)}
+                          draggable={false}
+                          className={`w-52 sm:w-56 rounded-xl p-3.5 flex flex-col justify-start h-32 transition-all shadow-md group border shrink-0 text-center relative ${
+                            isLocked 
+                              ? 'bg-zinc-950/60 border-white/5 opacity-60 cursor-not-allowed' 
+                              : 'bg-zinc-900/80 hover:bg-zinc-900 border-white/10'
+                          }`}
+                        >
+                          <div className="flex justify-between items-center w-full mb-2 pointer-events-none">
+                            <h3 className={`text-xs sm:text-sm font-bold tracking-tight text-white ${theme.hoverColor} transition-colors`}>
+                              {mod.title}
+                            </h3>
+                            {isLocked && (
+                              <span className="text-xs text-zinc-400 select-none" title="Berkunci">
+                                🔒
+                              </span>
+                            )}
+                          </div>
+
+                          <ul className="space-y-1 text-left pointer-events-none mx-auto w-full">
+                            <li className="text-[10px] sm:text-[11px] text-zinc-300 leading-tight flex items-start">
+                              <span className="mr-1.5 text-blue-400">•</span>
+                              <span className="line-clamp-2">{mod.subtitle}</span>
+                            </li>
+                          </ul>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Bottom Section */}
+        <div className="w-full pt-1 flex flex-col items-center text-center space-y-2">
+          <span className="text-xs font-medium text-zinc-400">Atau</span>
+          
+          <div className="flex justify-center">
+            <Link 
               href={`/skala/${id}/test?type=skala`}
-              className={`px-3 py-1.5 rounded-full text-xs font-semibold bg-zinc-950/85 hover:bg-zinc-900 transition-all shadow-md flex items-center gap-1.5 ${theme.testBtn}`}
-              title={`Ujian Skala ${id}`}
+              className={`inline-flex items-center justify-center py-2 px-6 rounded-full font-medium text-xs text-white shadow-lg transition-transform hover:scale-105 bg-transparent border-2 ${theme.testBtn}`}
+              style={{ letterSpacing: '-0.01em' }}
             >
-              Ujian Skala {id}
+              Mula Ujian Skala {id}
             </Link>
           </div>
+
+          <p className="text-xs text-zinc-300 font-normal leading-snug max-w-sm" style={{ letterSpacing: '-0.005em' }}>
+            Sila ambil ujian skala ini untuk menilai pencapaian keseluruhan anda sebelum beralih ke Skala 2.
+          </p>
         </div>
 
       </div>
 
-      {/* Hero / Header Section: Exact Layout and Spot Matching Home Page (/) */}
-      <div className="max-w-3xl mx-auto w-full pt-2 pb-4 text-center relative z-10 space-y-3">
-        <Link 
-          href="/" 
-          className="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto block transition-transform hover:scale-105 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]"
-          title="Kembali ke Laman Utama"
-        >
-          <Image 
-            src="/logo-kagat.png" 
-            alt="Iqra' Master Logo" 
-            fill
-            sizes="112px"
-            priority
-            className="object-contain"
-          />
-        </Link>
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">Skala {id}</h1>
-        <p className="text-blue-100 text-xs sm:text-sm max-w-md mx-auto">
-          Pilih modul pembelajaran di bawah untuk memulakan latihan anda.
-        </p>
-      </div>
+      {/* Locked Module Warning Popup Modal */}
+      {lockedPopupModule !== null && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center px-4 animate-in fade-in duration-200">
+          <div className="bg-zinc-950 border border-white/20 rounded-3xl p-6 max-w-sm w-full text-center space-y-4 shadow-2xl relative">
+            <div className="w-12 h-12 bg-red-500/10 border border-red-500/30 rounded-2xl mx-auto flex items-center justify-center text-xl">
+              🔒
+            </div>
+            
+            <div className="space-y-1">
+              <h3 className="text-base font-bold text-white">Modul Berkunci</h3>
+              <p className="text-xs text-zinc-300 leading-relaxed">
+                Anda perlu mengambil dan lulus <span className="text-emerald-400 font-semibold">Ujian Modul {lockedPopupModule - 1}</span> terlebih dahulu sebelum anda boleh mengakses Modul {lockedPopupModule}.
+              </p>
+            </div>
 
-      {/* Module Circular Grid Hub with Exact Gradient Border Glow Spot as Homepage */}
-      <section className="max-w-2xl mx-auto w-full pt-2 pb-12 flex-1 flex flex-col items-center justify-start relative z-10">
-        <div className="relative w-full max-w-lg">
-          {/* Subtle Multi-Color Shadow Backing */}
-          <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 opacity-20 blur-sm pointer-events-none" />
-
-          {/* Main Container Box */}
-          <div className="relative p-[1.5px] rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 w-full">
-            <div className="w-full bg-zinc-950/85 backdrop-blur-3xl text-white rounded-[22px] py-7 px-6 flex flex-col items-center gap-5 shadow-[0_15px_35px_rgba(0,0,0,0.8)] border border-white/15">
+            <div className="pt-2 flex flex-col gap-2">
+              <Link
+                href={`/skala/${id}/module/${lockedPopupModule - 1}/test`}
+                className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs shadow-lg transition-all"
+              >
+                Ambil Ujian Modul {lockedPopupModule - 1} Sekarang
+              </Link>
               
-              <span className="text-xs font-semibold tracking-wide text-zinc-300">
-                Pilih Modul Pembelajaran
-              </span>
-
-              {/* Module Circular Grid (1, 2, 3 | 4, 5, 6 | 7, 8, 9 | 10) */}
-              <div className="flex flex-col gap-4 w-full max-w-xs mx-auto items-center">
-                {/* Row 1: 1, 2, 3 */}
-                <div className="grid grid-cols-3 gap-4 justify-items-center w-full">
-                  {row1.map((modNum) => (
-                    <Link
-                      key={modNum}
-                      href={`/skala/${id}/module/${modNum}`}
-                      className="w-18 h-18 sm:w-20 sm:h-20 rounded-full flex flex-col items-center justify-center transition-all border border-white/20 bg-zinc-900/90 hover:bg-zinc-800 hover:border-white/50 text-white shadow-[0_8px_20px_rgba(0,0,0,0.5)] hover:scale-105 group font-sans"
-                    >
-                      <span className="text-[10px] font-medium text-zinc-400 tracking-tighter leading-none mb-1">Modul</span>
-                      <span className={`text-lg sm:text-xl font-bold transition-colors leading-none ${theme.hoverColor}`}>{modNum}</span>
-                    </Link>
-                  ))}
-                </div>
-
-                {/* Row 2: 4, 5, 6 */}
-                <div className="grid grid-cols-3 gap-4 justify-items-center w-full">
-                  {row2.map((modNum) => (
-                    <Link
-                      key={modNum}
-                      href={`/skala/${id}/module/${modNum}`}
-                      className="w-18 h-18 sm:w-20 sm:h-20 rounded-full flex flex-col items-center justify-center transition-all border border-white/20 bg-zinc-900/90 hover:bg-zinc-800 hover:border-white/50 text-white shadow-[0_8px_20px_rgba(0,0,0,0.5)] hover:scale-105 group font-sans"
-                    >
-                      <span className="text-[10px] font-medium text-zinc-400 tracking-tighter leading-none mb-1">Modul</span>
-                      <span className={`text-lg sm:text-xl font-bold transition-colors leading-none ${theme.hoverColor}`}>{modNum}</span>
-                    </Link>
-                  ))}
-                </div>
-
-                {/* Row 3: 7, 8, 9 */}
-                <div className="grid grid-cols-3 gap-4 justify-items-center w-full">
-                  {row3.map((modNum) => (
-                    <Link
-                      key={modNum}
-                      href={`/skala/${id}/module/${modNum}`}
-                      className="w-18 h-18 sm:w-20 sm:h-20 rounded-full flex flex-col items-center justify-center transition-all border border-white/20 bg-zinc-900/90 hover:bg-zinc-800 hover:border-white/50 text-white shadow-[0_8px_20px_rgba(0,0,0,0.5)] hover:scale-105 group font-sans"
-                    >
-                      <span className="text-[10px] font-medium text-zinc-400 tracking-tighter leading-none mb-1">Modul</span>
-                      <span className={`text-lg sm:text-xl font-bold transition-colors leading-none ${theme.hoverColor}`}>{modNum}</span>
-                    </Link>
-                  ))}
-                </div>
-
-                {/* Row 4: 10 */}
-                <div className="flex items-center justify-center w-full">
-                  {row4.map((modNum) => (
-                    <Link
-                      key={modNum}
-                      href={`/skala/${id}/module/${modNum}`}
-                      className="w-18 h-18 sm:w-20 sm:h-20 rounded-full flex flex-col items-center justify-center transition-all border border-white/20 bg-zinc-900/90 hover:bg-zinc-800 hover:border-white/50 text-white shadow-[0_8px_20px_rgba(0,0,0,0.5)] hover:scale-105 group font-sans"
-                    >
-                      <span className="text-[10px] font-medium text-zinc-400 tracking-tighter leading-none mb-1">Modul</span>
-                      <span className={`text-lg sm:text-xl font-bold transition-colors leading-none ${theme.hoverColor}`}>{modNum}</span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
+              <button
+                onClick={() => setLockedPopupModule(null)}
+                className="w-full py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-400 font-medium text-xs border border-white/10 transition-all"
+              >
+                Tutup
+              </button>
             </div>
           </div>
         </div>
-      </section>
+      )}
 
       {/* Footer */}
-      <footer className={`w-full pt-4 pb-4 border-t ${theme.footerBorder} text-center text-xs ${theme.footerText} relative z-10 font-sans`}>
+      <footer className={`w-full pt-3 pb-3 border-t ${theme.footerBorder} text-center text-xs text-white relative z-10 font-sans shrink-0`}>
         &copy; {new Date().getFullYear()} Iqra&apos; Master By DxiaTech. All Rights Reserved.
       </footer>
     </main>
