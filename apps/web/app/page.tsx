@@ -123,8 +123,8 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Content Wrapper pulled tightly to the top */}
-      <div className="w-full max-w-lg mx-auto flex flex-col items-center relative z-10 space-y-3 my-auto">
+      {/* Content Wrapper pinned to the top using pt-2 instead of my-auto */}
+      <div className="w-full max-w-lg mx-auto flex flex-col items-center relative z-15 space-y-3 pt-2 pb-6">
         
         {/* Hero / Header Section */}
         <div className="w-full text-center space-y-1.5">
