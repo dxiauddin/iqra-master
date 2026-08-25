@@ -23,7 +23,7 @@ export default function HomePage() {
           <div className="relative p-[1.5px] rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 transition-transform hover:scale-105">
             <Link
               href="/login"
-              className="w-10 h-10 rounded-full flex items-center justify-center bg-zinc-950/85 hover:bg-zinc-900 text-zinc-300 hover:text-white transition-all shadow-md"
+              className="w-11 h-11 rounded-full flex items-center justify-center bg-zinc-950/85 hover:bg-zinc-900 text-zinc-200 hover:text-white transition-all shadow-md"
               title="Log Masuk"
             >
               <svg 
@@ -45,56 +45,60 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Hero / Header Section: Moved to top with Get Started button & text */}
-      <div className="max-w-md mx-auto w-full pt-1 pb-2 text-center relative z-10 space-y-2">
-        <div className="relative w-16 h-16 sm:w-20 sm:h-20 mx-auto block transition-transform hover:scale-105 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+      {/* Hero / Header Section: Apple-inspired typography scaling */}
+      <div className="max-w-md mx-auto w-full pt-1 pb-3 text-center relative z-10 space-y-3">
+        <div className="relative w-20 h-20 sm:w-24 sm:h-24 mx-auto block transition-transform hover:scale-105 drop-shadow-[0_0_20px_rgba(255,255,255,0.25)]">
           <Image 
             src="/logo-kagat.png" 
             alt="Iqra' Master Logo" 
             fill
-            sizes="80px"
+            sizes="96px"
             priority
             className="object-contain"
           />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">Iqra&apos; Master</h1>
+        
+        {/* Apple style prominent headline */}
+        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
+          Iqra&apos; Master
+        </h1>
 
-        {/* Rounded Get Started Button with #0000FF Background */}
+        {/* Get Started Button with Apple-like clear weight */}
         <div className="pt-1 flex justify-center">
           <Link 
             href="/login"
-            className="inline-flex items-center justify-center py-2 px-6 rounded-full font-bold text-xs tracking-wide text-white shadow-md transition-transform hover:scale-105 hover:opacity-90"
+            className="inline-flex items-center justify-center py-2.5 px-7 rounded-full font-medium text-sm tracking-normal text-white shadow-lg transition-transform hover:scale-105 hover:opacity-90"
             style={{ backgroundColor: '#0000FF' }}
           >
             Get Started
           </Link>
         </div>
 
-        {/* Subtext description below button */}
-        <p className="text-[11px] text-zinc-400 pt-1">
+        {/* Subtext description with improved readability */}
+        <p className="text-sm text-zinc-300 font-normal pt-1.5 leading-relaxed">
           Atau <br /> Pilih Skala di bawah untuk memulakan pembelajaran anda.
         </p>
       </div>
 
       {/* Skala Circular Grid Hub (Theme Box) */}
-      <section className="max-w-2xl mx-auto w-full pt-1 pb-2 flex flex-col items-center justify-start relative z-10">
+      <section className="max-w-2xl mx-auto w-full pt-1 pb-3 flex flex-col items-center justify-start relative z-10">
         <div className="relative w-full max-w-lg">
           <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 opacity-20 blur-sm pointer-events-none" />
 
           {/* Main Container Box */}
           <div className="relative p-[1.5px] rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 w-full">
-            <div className="w-full bg-zinc-950/85 backdrop-blur-3xl text-white rounded-[22px] py-4 px-6 flex flex-col items-center gap-3 shadow-[0_15px_35px_rgba(0,0,0,0.8)] border border-white/15">
+            <div className="w-full bg-zinc-950/85 backdrop-blur-3xl text-white rounded-[22px] py-5 px-6 flex flex-col items-center gap-3 shadow-[0_15px_35px_rgba(0,0,0,0.8)] border border-white/15">
               
-              {/* Skala Selection Circles Grid */}
-              <div className="grid grid-cols-3 gap-4 sm:gap-5 justify-items-center w-full max-w-xs mx-auto">
+              {/* Skala Selection Circles Grid with clearer font layout */}
+              <div className="grid grid-cols-3 gap-5 sm:gap-6 justify-items-center w-full max-w-sm mx-auto">
                 {skalaLevels.map((skalaNum) => (
                   <Link
                     key={skalaNum}
                     href={`/skala/${skalaNum}`}
-                    className="w-16 h-16 sm:w-18 sm:h-18 rounded-full flex flex-col items-center justify-center transition-all border border-white/20 bg-zinc-900/90 hover:bg-zinc-800 hover:border-white/50 text-white shadow-[0_8px_20px_rgba(0,0,0,0.5)] hover:scale-105 group font-sans"
+                    className="w-18 h-18 sm:w-20 sm:h-20 rounded-full flex flex-col items-center justify-center transition-all border border-white/20 bg-zinc-900/90 hover:bg-zinc-800 hover:border-white/50 text-white shadow-[0_8px_20px_rgba(0,0,0,0.5)] hover:scale-105 group font-sans"
                   >
-                    <span className="text-[9px] font-medium text-zinc-400 tracking-tighter leading-none mb-1">Skala</span>
-                    <span className="text-base sm:text-lg font-bold group-hover:text-emerald-400 transition-colors leading-none">{skalaNum}</span>
+                    <span className="text-[11px] font-medium text-zinc-400 tracking-wide leading-none mb-1">Skala</span>
+                    <span className="text-xl sm:text-2xl font-semibold group-hover:text-emerald-400 transition-colors leading-none">{skalaNum}</span>
                   </Link>
                 ))}
               </div>
@@ -105,26 +109,26 @@ export default function HomePage() {
       </section>
 
       {/* Bottom Section: Atau, Ujian Skala Button & Description */}
-      <div className="max-w-md mx-auto w-full pb-4 px-6 flex flex-col items-center text-center relative z-10 space-y-2">
-        <span className="text-xs font-semibold text-zinc-400 tracking-wider">Atau</span>
+      <div className="max-w-md mx-auto w-full pb-6 px-6 flex flex-col items-center text-center relative z-10 space-y-2.5">
+        <span className="text-xs font-medium text-zinc-400 tracking-widest uppercase">Atau</span>
         
         <div className="flex justify-center">
           <Link 
             href="/ujian-skala"
-            className="inline-flex items-center justify-center py-2 px-6 rounded-full font-bold text-xs tracking-wide text-white shadow-lg transition-transform hover:scale-105 hover:opacity-90"
+            className="inline-flex items-center justify-center py-2.5 px-7 rounded-full font-medium text-sm tracking-normal text-white shadow-lg transition-transform hover:scale-105 hover:opacity-90"
             style={{ backgroundColor: '#0000FF' }}
           >
             Mula Ujian Skala
           </Link>
         </div>
 
-        <p className="text-xs text-zinc-400 leading-relaxed max-w-sm pt-1">
+        <p className="text-sm text-zinc-300 font-normal leading-relaxed max-w-sm pt-1">
           Sila ambil ujian ini untuk mengenal pasti tahap penguasaan bacaan anda serta mengetahui skala sebenar yang paling sesuai untuk dimulakan.
         </p>
       </div>
 
       {/* Footer */}
-      <footer className="w-full pt-2 pb-3 border-t border-blue-900/40 text-center text-xs text-blue-300 relative z-10 font-sans">
+      <footer className="w-full pt-3 pb-4 border-t border-blue-900/40 text-center text-xs text-blue-300 relative z-10 font-sans">
         &copy; {new Date().getFullYear()} Iqra&apos; Master By DxiaTech. All Rights Reserved.
       </footer>
     </main>
