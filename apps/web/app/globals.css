@@ -1,13 +1,5 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: 'UthmaniOTF';
-  src: url('/fonts/uthmani-font.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
   --background: #000000;
   --foreground: #ededed;
@@ -26,7 +18,7 @@ body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
-/* Global utility class for the font */
+/* Global utility class for the font with fallback to standard Arabic system fonts */
 .font-arabic {
-  font-family: 'UthmaniOTF', serif;
+  font-family: 'Traditional Arabic', 'Amiri', 'Times New Roman', serif;
 }

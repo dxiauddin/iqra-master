@@ -2,7 +2,7 @@
 
 import { useState, use, useRef, useEffect, useTransition } from 'react';
 import Link from 'next/link';
-import { getSkalaProgress } from '@/app/actions';
+import { getSkalaProgress, resetSkalaProgress } from '@/app/actions';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -65,6 +65,22 @@ export default function SkalaDashboardPage({ params }: PageProps) {
         setLockedPopupModule(modNum);
         return;
       }
+    }
+  };
+
+  // Handle resetting progress for development testing
+  const handleReset = async () => {
+    if (window.confirm('Adakah anda pasti mahu menetapkan semula (reset) semua pencapaian untuk Skala ini?')) {
+      startTransition(async () => {
+        try {
+          const currentUserId = 1;
+          const skalaNum = parseInt(id, 10);
+          await resetSkalaProgress(currentUserId, skalaNum);
+          window.location.reload();
+        } catch (err) {
+          console.error('Failed to reset progress:', err);
+        }
+      });
     }
   };
 
@@ -131,6 +147,7 @@ export default function SkalaDashboardPage({ params }: PageProps) {
   };
 
   const theme = getTheme(id);
+  const isSkala2 = id === '2';
 
   // Mouse drag handlers for desktop smooth sliding across the module carousel
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -157,8 +174,19 @@ export default function SkalaDashboardPage({ params }: PageProps) {
     }
   };
 
-  // 10 Modules data with precise custom curriculum subtitles
-  const modulesData = [
+  // Modules data with custom curriculum subtitles for Skala 2 vs others
+  const modulesData = isSkala2 ? [
+    { num: 1, title: 'Modul 1', subtitle: 'Mengenal baris tanwin' },
+    { num: 2, title: 'Modul 2', subtitle: 'Mengenal baris tanwin' },
+    { num: 3, title: 'Modul 3', subtitle: 'Mengenal baris tanwin' },
+    { num: 4, title: 'Modul 4', subtitle: 'Mengenal bentuk huruf bersambung' },
+    { num: 5, title: 'Modul 5', subtitle: 'Mengenal bentuk huruf bersambung' },
+    { num: 6, title: 'Modul 6', subtitle: 'Mengenal bentuk huruf bersambung' },
+    { num: 7, title: 'Modul 7', subtitle: 'Mengenal bentuk huruf bersambung' },
+    { num: 8, title: 'Modul 8', subtitle: 'Mengenal bentuk huruf bersambung' },
+    { num: 9, title: 'Modul 9', subtitle: 'Mengenal bentuk huruf bersambung' },
+    { num: 10, title: 'Modul 10', subtitle: 'Mengenal bentuk huruf bersambung' },
+  ] : [
     { num: 1, title: 'Modul 1', subtitle: 'Mengenal huruf hijaiyah' },
     { num: 2, title: 'Modul 2', subtitle: 'Mengenal baris atas, bawah dan depan' },
     { num: 3, title: 'Modul 3', subtitle: 'Implimentasi baris atas, bawah dan depan' },
@@ -254,14 +282,29 @@ export default function SkalaDashboardPage({ params }: PageProps) {
 
           {/* Bulleted Subtitle List */}
           <ul className="text-xs text-zinc-300 font-normal pt-1 space-y-1 text-left max-w-xs mx-auto" style={{ letterSpacing: '-0.005em' }}>
-            <li className="flex items-center">
-              <span className="mr-2 text-blue-400">•</span>
-              <span>Mengenal huruf hijaiyah</span>
-            </li>
-            <li className="flex items-center">
-              <span className="mr-2 text-blue-400">•</span>
-              <span>Mengenal baris atas, bawah dan depan</span>
-            </li>
+            {isSkala2 ? (
+              <>
+                <li className="flex items-center">
+                  <span className="mr-2 text-blue-400">•</span>
+                  <span>Mengenal baris tanwin dan sabdu</span>
+                </li>
+                <li className="flex items-center">
+                  <span className="mr-2 text-blue-400">•</span>
+                  <span>Mengenal bentuk huruf bersambung</span>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="flex items-center">
+                  <span className="mr-2 text-blue-400">•</span>
+                  <span>Mengenal huruf hijaiyah</span>
+                </li>
+                <li className="flex items-center">
+                  <span className="mr-2 text-blue-400">•</span>
+                  <span>Mengenal baris atas, bawah dan depan</span>
+                </li>
+              </>
+            )}
           </ul>
         </div>
 
@@ -353,9 +396,17 @@ export default function SkalaDashboardPage({ params }: PageProps) {
             </Link>
           </div>
 
-          <p className="text-xs text-zinc-300 font-normal leading-snug max-w-sm" style={{ letterSpacing: '-0.005em' }}>
+          <p className="text-xs text-zinc-300 font-normal leading-snug max-w-sm pb-1" style={{ letterSpacing: '-0.005em' }}>
             Sila ambil ujian skala ini untuk menilai pencapaian keseluruhan anda sebelum beralih ke Skala 2.
           </p>
+
+          {/* Development Reset Button */}
+          <button
+            onClick={handleReset}
+            className="text-[10px] text-red-400 hover:text-red-300 underline tracking-wider uppercase pt-1 transition-colors cursor-pointer"
+          >
+            [Dev] Reset Semua Pencapaian Skala {id}
+          </button>
         </div>
 
       </div>
@@ -385,7 +436,7 @@ export default function SkalaDashboardPage({ params }: PageProps) {
               
               <button
                 onClick={() => setLockedPopupModule(null)}
-                className="w-full py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-400 font-medium text-xs border border-white/10 transition-all"
+                className="w-full py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-400 font-medium text-xs border border-white/10 transition-all cursor-pointer"
               >
                 Tutup
               </button>

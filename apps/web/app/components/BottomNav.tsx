@@ -49,7 +49,7 @@ export default function BottomNav() {
   }
 
   return (
-    <div className="fixed bottom-5 left-1/2 -translate-x-1/2 w-[92%] max-w-md z-50 pointer-events-auto">
+    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 w-[92%] max-w-md z-50 pointer-events-auto">
       
       {/* Skala 1-6 Popup */}
       {showSkalaPopup && (
@@ -89,8 +89,8 @@ export default function BottomNav() {
         </div>
       )}
 
-      {/* Main Bottom Nav Bar */}
-      <nav className="w-full bg-zinc-950/5 backdrop-blur-[2px] text-white rounded-full px-4 py-1.5 flex items-center justify-around shadow-[0_8px_25px_rgba(0,0,0,0.15)] border border-white/5">
+      {/* Main Bottom Nav Bar (Moved higher up) */}
+      <nav className="w-full bg-zinc-950/5 backdrop-blur-[2px] text-white rounded-full px-4 py-2 flex items-center justify-around shadow-[0_8px_25px_rgba(0,0,0,0.15)] border border-white/5">
         
         {/* Home */}
         <Link href="/" className="flex flex-col items-center gap-0 text-white/70 hover:text-white transition-colors group">

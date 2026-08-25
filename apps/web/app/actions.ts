@@ -160,3 +160,23 @@ export async function getSkalaProgress(userId: number, skalaId: number, totalMod
     return { overall_percent: 0, current_module: 1 };
   }
 }
+
+// --- RESET PROGRESS ACTION (Development Testing) ---
+
+export async function resetSkalaProgress(userId: number, skalaId: number) {
+  if (!userId) {
+    return { error: 'Unauthorized user.' };
+  }
+
+  try {
+    await db.$executeRaw`
+      DELETE FROM user_module_progress 
+      WHERE user_id = ${userId} AND skala_id = ${skalaId}
+    `;
+
+    return { success: true };
+  } catch (err: any) {
+    console.error('Failed to reset Skala progress:', err);
+    return { error: err.message || 'Database error while resetting progress.' };
+  }
+}
