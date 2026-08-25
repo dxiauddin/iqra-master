@@ -5,18 +5,44 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 export default function SignupPage() {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showEmailModal, setShowEmailModal] = useState(false);
+  
+  // State for toggling password visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleEmailSignup = (e: React.FormEvent) => {
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [popupMessage, setPopupMessage] = useState<string | null>(null);
+
+  const handleEmailSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert('Kata laluan tidak sepadan!');
+      setPopupMessage('Kata laluan tidak sepadan!');
       return;
     }
-    alert(`Signing up with email: ${email}`);
+
+    try {
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name || email.split('@')[0], email, password }),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        setPopupMessage('Pendaftaran berjaya! Sila log masuk.');
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 1500);
+      } else {
+        setPopupMessage(data.error || 'Pendaftaran gagal. Sila cuba lagi.');
+      }
+    } catch (err) {
+      setPopupMessage('Ralat rangkaian. Sila semak sambungan anda.');
+    }
   };
 
   return (
@@ -24,24 +50,24 @@ export default function SignupPage() {
       className="min-h-screen text-white flex flex-col justify-between relative px-4 font-sans antialiased"
       style={{ background: 'linear-gradient(to bottom, #00472B 0%, #000000 30%, #000000 70%, #00472B 100%)' }}
     >
-      
-      {/* Background Ambient Glow */}
       <div className="absolute w-96 h-96 bg-[#00472B]/30 rounded-full blur-3xl pointer-events-none top-1/4 left-1/2 -translate-x-1/2" />
 
-      {/* SVG Gradient Definition */}
-      <svg width="0" height="0" className="absolute">
-        <defs>
-          <linearGradient id="themeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#3B82F6" />
-            <stop offset="50%" stopColor="#FACC15" />
-            <stop offset="100%" stopColor="#EF4444" />
-          </linearGradient>
-        </defs>
-      </svg>
+      {popupMessage && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4 animate-fadeIn">
+          <div className="bg-zinc-950 border border-white/20 rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl space-y-4">
+            <p className="text-sm text-zinc-200 font-medium">{popupMessage}</p>
+            <button
+              onClick={() => setPopupMessage(null)}
+              className="py-2 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white transition-all shadow-md"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="pt-6"></div>
 
-      {/* Hero / Header Section */}
       <div className="max-w-3xl mx-auto w-full pt-2 pb-2 text-center relative z-10 space-y-2">
         <Link 
           href="/" 
@@ -61,7 +87,6 @@ export default function SignupPage() {
         <p className="text-xs text-zinc-400">Sila daftar akaun baru untuk menyimpan rekod pencapaian anda.</p>
       </div>
 
-      {/* Central Signup Container Hub */}
       <section className="max-w-md mx-auto w-full pt-2 pb-12 flex-1 flex flex-col items-center justify-start relative z-10">
         <div className="relative w-full">
           <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 opacity-20 blur-sm pointer-events-none" />
@@ -69,7 +94,6 @@ export default function SignupPage() {
           <div className="relative p-[1.5px] rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 w-full">
             <div className="w-full bg-zinc-950/90 backdrop-blur-3xl text-white rounded-[22px] pt-5 pb-7 px-6 flex flex-col items-center gap-6 shadow-[0_15px_35px_rgba(0,0,0,0.8)] border border-white/15">
               
-              {/* Header Row: Centered Title with Absolute Cancel Button */}
               <div className="w-full relative flex items-center justify-center pb-1">
                 <span className="text-xs font-semibold tracking-wide text-zinc-300">
                   Daftar Akaun Baru
@@ -86,10 +110,9 @@ export default function SignupPage() {
                 </Link>
               </div>
 
-              {/* Social Signups */}
               <div className="flex flex-col gap-3 w-full">
                 <button 
-                  onClick={() => alert('Google Sign-Up clicked')}
+                  onClick={() => setPopupMessage('Google Sign-Up akan datang!')}
                   className="w-full py-2.5 px-4 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-white/15 text-xs font-semibold text-zinc-200 transition-all flex items-center justify-center gap-2.5 shadow-sm group"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
@@ -102,7 +125,7 @@ export default function SignupPage() {
                 </button>
 
                 <button 
-                  onClick={() => alert('Facebook Sign-Up clicked')}
+                  onClick={() => setPopupMessage('Facebook Sign-Up akan datang!')}
                   className="w-full py-2.5 px-4 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-white/15 text-xs font-semibold text-zinc-200 transition-all flex items-center justify-center gap-2.5 shadow-sm group"
                 >
                   <svg className="w-4 h-4 fill-[#1877F2]" viewBox="0 0 24 24">
@@ -112,7 +135,6 @@ export default function SignupPage() {
                 </button>
               </div>
 
-              {/* Toggle Option for Email */}
               <div className="flex items-center w-full my-1 cursor-pointer" onClick={() => setShowEmailModal(!showEmailModal)}>
                 <div className="flex-grow border-t border-zinc-800"></div>
                 <span className="px-3 text-[10px] text-emerald-400 font-semibold tracking-wider hover:underline">
@@ -121,9 +143,20 @@ export default function SignupPage() {
                 <div className="flex-grow border-t border-zinc-800"></div>
               </div>
 
-              {/* Email Form */}
               {showEmailModal && (
                 <form onSubmit={handleEmailSignup} className="flex flex-col gap-4 w-full bg-zinc-900/80 p-4 rounded-2xl border border-white/10 animate-fadeIn">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[11px] font-medium text-zinc-400">Nama Penuh</label>
+                    <input 
+                      type="text" 
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Nama anda"
+                      required
+                      className="w-full px-3 py-2 rounded-xl bg-zinc-950 border border-white/15 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                    />
+                  </div>
+
                   <div className="flex flex-col gap-1.5">
                     <label className="text-[11px] font-medium text-zinc-400">E-mail</label>
                     <input 
@@ -136,28 +169,58 @@ export default function SignupPage() {
                     />
                   </div>
 
+                  {/* Password Input with Eye Toggle */}
                   <div className="flex flex-col gap-1.5">
                     <label className="text-[11px] font-medium text-zinc-400">Kata Laluan</label>
-                    <input 
-                      type="password" 
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="••••••••"
-                      required
-                      className="w-full px-3 py-2 rounded-xl bg-zinc-950 border border-white/15 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors"
-                    />
+                    <div className="relative">
+                      <input 
+                        type={showPassword ? 'text' : 'password'} 
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="••••••••"
+                        required
+                        className="w-full px-3 py-2 pr-9 rounded-xl bg-zinc-950 border border-white/15 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white transition-colors"
+                        title={showPassword ? 'Sembunyikan kata laluan' : 'Papar kata laluan'}
+                      >
+                        {showPassword ? (
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m14.41 14.41l-3.59-3.59"/></svg>
+                        ) : (
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                        )}
+                      </button>
+                    </div>
                   </div>
 
+                  {/* Confirm Password Input with Eye Toggle */}
                   <div className="flex flex-col gap-1.5">
                     <label className="text-[11px] font-medium text-zinc-400">Sahkan Kata Laluan</label>
-                    <input 
-                      type="password" 
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      placeholder="••••••••"
-                      required
-                      className="w-full px-3 py-2 rounded-xl bg-zinc-950 border border-white/15 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors"
-                    />
+                    <div className="relative">
+                      <input 
+                        type={showConfirmPassword ? 'text' : 'password'} 
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="••••••••"
+                        required
+                        className="w-full px-3 py-2 pr-9 rounded-xl bg-zinc-950 border border-white/15 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white transition-colors"
+                        title={showConfirmPassword ? 'Sembunyikan kata laluan' : 'Papar kata laluan'}
+                      >
+                        {showConfirmPassword ? (
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m14.41 14.41l-3.59-3.59"/></svg>
+                        ) : (
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                        )}
+                      </button>
+                    </div>
                   </div>
 
                   <button 
@@ -169,7 +232,6 @@ export default function SignupPage() {
                 </form>
               )}
 
-              {/* Login Redirect Link */}
               <div className="text-center text-xs text-zinc-400 pt-1">
                 Sudah mempunyai akaun?{' '}
                 <Link href="/login" className="text-emerald-400 font-semibold hover:underline">
@@ -182,7 +244,6 @@ export default function SignupPage() {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="w-full pt-4 pb-4 border-t border-emerald-900/40 text-center text-xs text-emerald-300/80 relative z-10 font-sans">
         &copy; {new Date().getFullYear()} Iqra&apos; Master By DxiaTech. All Rights Reserved.
       </footer>
