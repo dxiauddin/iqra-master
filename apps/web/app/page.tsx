@@ -17,7 +17,7 @@ export default function HomePage() {
       <div className="absolute w-96 h-96 bg-blue-500/15 rounded-full blur-3xl pointer-events-none top-1/4 left-1/2 -translate-x-1/2" />
 
       {/* Top Bar: Profile/Login Icon Only (Top Right) */}
-      <div className="max-w-4xl mx-auto w-full pt-6 px-4 flex justify-end items-start relative z-20">
+      <div className="max-w-4xl mx-auto w-full pt-4 px-4 flex justify-end items-start relative z-20">
         <div className="relative">
           <div className="absolute -inset-0.5 rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 blur-[2px] opacity-25 pointer-events-none" />
           <div className="relative p-[1.5px] rounded-full bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 transition-transform hover:scale-105">
@@ -45,43 +45,55 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Hero / Header Section Pushed Higher to Top */}
-      <div className="max-w-3xl mx-auto w-full pt-1 pb-2 text-center relative z-10 space-y-2">
-        <div className="relative w-20 h-20 sm:w-24 sm:h-24 mx-auto block transition-transform hover:scale-105 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+      {/* Hero / Header Section: Moved to top with Get Started button & text */}
+      <div className="max-w-md mx-auto w-full pt-1 pb-2 text-center relative z-10 space-y-2">
+        <div className="relative w-16 h-16 sm:w-20 sm:h-20 mx-auto block transition-transform hover:scale-105 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
           <Image 
             src="/logo-kagat.png" 
             alt="Iqra' Master Logo" 
             fill
-            sizes="96px"
+            sizes="80px"
             priority
             className="object-contain"
           />
         </div>
         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">Iqra&apos; Master</h1>
-        <p className="text-blue-100 text-xs sm:text-sm max-w-md mx-auto">
-          Pilih Skala di bawah untuk memulakan pembelajaran anda.
+
+        {/* Get Started Button */}
+        <div className="pt-1">
+          <Link 
+            href="/login"
+            className="inline-block w-full py-2.5 px-6 rounded-xl font-bold text-xs tracking-wide bg-blue-600 hover:bg-blue-500 text-white shadow-md transition-transform hover:scale-[1.01]"
+          >
+            Get Started
+          </Link>
+        </div>
+
+        {/* Subtext description below button */}
+        <p className="text-[11px] text-zinc-400 pt-1">
+          Atau <br /> Pilih Skala di bawah untuk memulakan pembelajaran anda.
         </p>
       </div>
 
       {/* Skala Circular Grid Hub (Theme Box) */}
-      <section className="max-w-2xl mx-auto w-full pt-1 pb-4 flex flex-col items-center justify-start relative z-10">
+      <section className="max-w-2xl mx-auto w-full pt-1 pb-2 flex flex-col items-center justify-start relative z-10">
         <div className="relative w-full max-w-lg">
           <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 opacity-20 blur-sm pointer-events-none" />
 
           {/* Main Container Box */}
           <div className="relative p-[1.5px] rounded-3xl bg-gradient-to-r from-blue-500 via-yellow-400 to-red-500 w-full">
-            <div className="w-full bg-zinc-950/85 backdrop-blur-3xl text-white rounded-[22px] py-6 px-6 flex flex-col items-center gap-4 shadow-[0_15px_35px_rgba(0,0,0,0.8)] border border-white/15">
+            <div className="w-full bg-zinc-950/85 backdrop-blur-3xl text-white rounded-[22px] py-4 px-6 flex flex-col items-center gap-3 shadow-[0_15px_35px_rgba(0,0,0,0.8)] border border-white/15">
               
               {/* Skala Selection Circles Grid */}
-              <div className="grid grid-cols-3 gap-5 sm:gap-6 justify-items-center w-full max-w-xs mx-auto">
+              <div className="grid grid-cols-3 gap-4 sm:gap-5 justify-items-center w-full max-w-xs mx-auto">
                 {skalaLevels.map((skalaNum) => (
                   <Link
                     key={skalaNum}
                     href={`/skala/${skalaNum}`}
-                    className="w-18 h-18 sm:w-20 sm:h-20 rounded-full flex flex-col items-center justify-center transition-all border border-white/20 bg-zinc-900/90 hover:bg-zinc-800 hover:border-white/50 text-white shadow-[0_8px_20px_rgba(0,0,0,0.5)] hover:scale-105 group font-sans"
+                    className="w-16 h-16 sm:w-18 sm:h-18 rounded-full flex flex-col items-center justify-center transition-all border border-white/20 bg-zinc-900/90 hover:bg-zinc-800 hover:border-white/50 text-white shadow-[0_8px_20px_rgba(0,0,0,0.5)] hover:scale-105 group font-sans"
                   >
-                    <span className="text-[10px] font-medium text-zinc-400 tracking-tighter leading-none mb-1">Skala</span>
-                    <span className="text-lg sm:text-xl font-bold group-hover:text-emerald-400 transition-colors leading-none">{skalaNum}</span>
+                    <span className="text-[9px] font-medium text-zinc-400 tracking-tighter leading-none mb-1">Skala</span>
+                    <span className="text-base sm:text-lg font-bold group-hover:text-emerald-400 transition-colors leading-none">{skalaNum}</span>
                   </Link>
                 ))}
               </div>
@@ -91,11 +103,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Bottom Section: Ujian Skala Button & Description */}
-      <div className="max-w-md mx-auto w-full pb-6 px-6 flex flex-col items-center text-center relative z-10 space-y-2">
+      {/* Bottom Section: Ujian Skala Button & Description (Remaining Unchanged) */}
+      <div className="max-w-md mx-auto w-full pb-4 px-6 flex flex-col items-center text-center relative z-10 space-y-2">
         <Link 
           href="/ujian-skala"
-          className="w-full py-3.5 px-6 rounded-xl font-bold text-sm tracking-wide bg-gradient-to-r from-blue-600 via-amber-500 to-red-600 hover:opacity-95 text-white shadow-lg transition-transform hover:scale-[1.02]"
+          className="w-full py-3 px-6 rounded-xl font-bold text-sm tracking-wide bg-gradient-to-r from-blue-600 via-amber-500 to-red-600 hover:opacity-95 text-white shadow-lg transition-transform hover:scale-[1.02]"
         >
           Mula Ujian Skala
         </Link>
@@ -105,7 +117,7 @@ export default function HomePage() {
       </div>
 
       {/* Footer */}
-      <footer className="w-full pt-3 pb-4 border-t border-blue-900/40 text-center text-xs text-blue-300 relative z-10 font-sans">
+      <footer className="w-full pt-2 pb-3 border-t border-blue-900/40 text-center text-xs text-blue-300 relative z-10 font-sans">
         &copy; {new Date().getFullYear()} Iqra&apos; Master By DxiaTech. All Rights Reserved.
       </footer>
     </main>
