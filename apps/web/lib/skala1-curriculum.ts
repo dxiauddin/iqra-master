@@ -12,29 +12,29 @@ export const skala1Alphabet: HarfCard[] = [
   { id: 3, arabic: 'ت', name: 'Ta' },
   { id: 4, arabic: 'ث', name: 'Tha' },
   { id: 5, arabic: 'ج', name: 'Jim' },
-  { id: 6, arabic: 'ح', name: 'Ha' },
-  { id: 7, arabic: 'خ', name: 'Kha' },
+  { id: 6, arabic: 'ح', name: 'Hha' },
+  { id: 7, arabic: 'خ', name: 'Kho' },
   { id: 8, arabic: 'د', name: 'Dal' },
-  { id: 9, arabic: 'ذ', name: 'Dhal' },
-  { id: 10, arabic: 'ر', name: 'Ra' },
+  { id: 9, arabic: 'ذ', name: 'Dzal' },
+  { id: 10, arabic: 'ر', name: 'Ro' },
   { id: 11, arabic: 'ز', name: 'Zai' },
   { id: 12, arabic: 'س', name: 'Sin' },
   { id: 13, arabic: 'ش', name: 'Shin' },
-  { id: 14, arabic: 'ص', name: 'Sad' },
-  { id: 15, arabic: 'ض', name: 'Dhad' },
-  { id: 16, arabic: 'ط', name: 'Ta' },
-  { id: 17, arabic: 'ظ', name: 'Zha' },
+  { id: 14, arabic: 'ص', name: 'Sod' },
+  { id: 15, arabic: 'ض', name: 'Dhod' },
+  { id: 16, arabic: 'ط', name: 'Tho' },
+  { id: 17, arabic: 'ظ', name: 'Zho' },
   { id: 18, arabic: 'ع', name: 'Ain' },
   { id: 19, arabic: 'غ', name: 'Ghain' },
   { id: 20, arabic: 'ف', name: 'Fa' },
-  { id: 21, arabic: 'ق', name: 'Qaf' },
+  { id: 21, arabic: 'ق', name: 'Qof' },
   { id: 22, arabic: 'ك', name: 'Kaf' },
   { id: 23, arabic: 'ل', name: 'Lam' },
   { id: 24, arabic: 'م', name: 'Mim' },
   { id: 25, arabic: 'ن', name: 'Nun' },
   { id: 26, arabic: 'و', name: 'Wau' },
   { id: 27, arabic: 'هـ', name: 'Ha' },
-  { id: 28, arabic: '\uFEFB', name: 'Lam Alif' }, // Kept in alphabet
+  { id: 28, arabic: '\uFEFB', name: 'Lam-Alif' },
   { id: 29, arabic: 'ء', name: 'Hamzah' },
   { id: 30, arabic: 'ي', name: 'Ya' },
 ];
@@ -61,7 +61,6 @@ export function generateBarisForms(letters: HarfCard[]): HarfCard[] {
   return result;
 }
 
-// For general mixed pools (like Modules 9+), we generate forms using only letters *excluding* Lam Alif (index 27)
 const nonLamAlifAlphabet = skala1Alphabet.filter((_, idx) => idx !== 27);
 export const allBarisForms = generateBarisForms(nonLamAlifAlphabet);
 
@@ -87,7 +86,6 @@ export function getSkala1IntensiveForms(mod: number): HarfCard[] {
       rawSubset = [skala1Alphabet[21], skala1Alphabet[22], skala1Alphabet[23], skala1Alphabet[24]];
       break;
     case 8:
-      // Module 8: Wau(25), Ha(26), skipping Lam Alif(27), taking Hamzah(28) and Ya(29)
       rawSubset = [
         skala1Alphabet[25], 
         skala1Alphabet[26], 
@@ -112,7 +110,6 @@ export function getSkala1PriorForms(mod: number): HarfCard[] {
     case 8: limitIndex = 25; break;
     default: limitIndex = 4;
   }
-  // Exclude Lam Alif from prior forms as well if needed
   const priorSubset = skala1Alphabet.slice(0, limitIndex).filter((_, idx) => idx !== 27);
   return generateBarisForms(priorSubset);
 }

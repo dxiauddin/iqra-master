@@ -12,60 +12,51 @@ export const skala2Alphabet: HarfCard[] = [
   { id: 3, arabic: 'ت', name: 'Ta' },
   { id: 4, arabic: 'ث', name: 'Tha' },
   { id: 5, arabic: 'ج', name: 'Jim' },
-  { id: 6, arabic: 'ح', name: 'Ha' },
-  { id: 7, arabic: 'خ', name: 'Kha' },
+  { id: 6, arabic: 'ح', name: 'Hha' },
+  { id: 7, arabic: 'خ', name: 'Kho' },
   { id: 8, arabic: 'د', name: 'Dal' },
-  { id: 9, arabic: 'ذ', name: 'Dhal' },
-  { id: 10, arabic: 'ر', name: 'Ra' },
+  { id: 9, arabic: 'ذ', name: 'Dzal' },
+  { id: 10, arabic: 'ر', name: 'Ro' },
   { id: 11, arabic: 'ز', name: 'Zai' },
   { id: 12, arabic: 'س', name: 'Sin' },
   { id: 13, arabic: 'ش', name: 'Shin' },
-  { id: 14, arabic: 'ص', name: 'Sad' },
-  { id: 15, arabic: 'ض', name: 'Dhad' },
-  { id: 16, arabic: 'ط', name: 'Ta' },
-  { id: 17, arabic: 'ظ', name: 'Zha' },
+  { id: 14, arabic: 'ص', name: 'Sod' },
+  { id: 15, arabic: 'ض', name: 'Dhod' },
+  { id: 16, arabic: 'ط', name: 'Tho' },
+  { id: 17, arabic: 'ظ', name: 'Zho' },
   { id: 18, arabic: 'ع', name: 'Ain' },
   { id: 19, arabic: 'غ', name: 'Ghain' },
   { id: 20, arabic: 'ف', name: 'Fa' },
-  { id: 21, arabic: 'ق', name: 'Qaf' },
+  { id: 21, arabic: 'ق', name: 'Qof' },
   { id: 22, arabic: 'ك', name: 'Kaf' },
   { id: 23, arabic: 'ل', name: 'Lam' },
   { id: 24, arabic: 'م', name: 'Mim' },
   { id: 25, arabic: 'ن', name: 'Nun' },
   { id: 26, arabic: 'و', name: 'Wau' },
   { id: 27, arabic: 'هـ', name: 'Ha' },
-  { id: 28, arabic: '\uFEFB', name: 'Lam Alif' },
+  { id: 28, arabic: '\uFEFB', name: 'Lam-Alif' },
   { id: 29, arabic: 'ء', name: 'Hamzah' },
   { id: 30, arabic: 'ي', name: 'Ya' },
 ];
 
-// Curated pool of 100% authentic 3-harf Quranic words using ONLY baris and tanwin
 const quranicPureVowelPool: Record<string, string[]> = {
-  // Module 4: Alif, Ba, Ta, Tha
   'أ': ['أَكَلَ', 'أَمَرَ', 'أَحَدٌ', 'أَخَذَ', 'أَثِمَ', 'أَمَراً', 'أَحَدٍ', 'أَكُلاً'],
   'ب': ['بَسَطَ', 'بَرَكَ', 'بَعَثَ', 'بَصَرٌ', 'بَلَغَ', 'بَرِئَ', 'بَحَرَ', 'بَدَلٌ'],
   'ت': ['تَبِعَ', 'تَرَكَ', 'تَلَاَ', 'تَوَبَ', 'تَبَابٌ', 'تَمِرٌ'],
   'ث': ['ثَبَتَ', 'ثَقُلَ', 'ثَمَرَ', 'ثَبْتٌ', 'ثَمَرٌ'],
-
-  // Module 5: Jim, Ha, Kha, Dal, Dhal, Ra, Zai
   'ج': ['جَعَلَ', 'جَمَعَ', 'جَبَلٌ', 'جَزَاَ', 'جَحَدَ', 'جَعَلٌ'],
   'ح': ['حَمَلَ', 'حَسِبَ', 'حَكَمَ', 'حَفِظَ', 'حَسَنٌ', 'حَرَمٌ'],
   'خ': ['خَلَقَ', 'خَرَجَ', 'خَتَمَ', 'خَشِيَ', 'خَبَرٌ', 'خَلَفٌ'],
   'د': ['دَخَلَ', 'دَعَاَ', 'دَرَىَ', 'دَفَعَ', 'دَحَرَ', 'دَرَنٌ'],
   'ذ': ['ذَهَبَ', 'ذَكَرَ', 'ذَبَحَ', 'ذَرَأَ', 'ذَكَرٌ'],
   'ر': ['رَزَقَ', 'رَفَعَ', 'رَحِمَ', 'رَكَبَ', 'رَجُلٌ', 'رَسَمَ'],
-  'z': ['زَيَّنَ', 'زَلَزَ', 'زَحَفَ', 'زَبَدٌ'],
   'ز': ['زَرَعَ', 'زَجَرَ', 'زَقَرَ', 'زَمَنٌ'],
-
-  // Module 6: Sin, Shin, Sad, Dhad, Ta, Zha
   'س': ['سَمِعَ', 'سَجَدَ', 'سَأَلَ', 'سَبَحَ', 'سَلِمَ', 'سَحَرَ'],
   'ش': ['شَهِدَ', 'شَكَرَ', 'شَرِبَ', 'شَفَعَ', 'شَجَرٌ', 'شَرِبٌ'],
   'ص': ['صَبَرَ', 'صَدَقَ', 'صَنَعَ', 'صَرَفَ', 'صَفَحَ', 'صَحُبَ'],
   'ض': ['ضَرَبَ', 'ضَلَّكَ', 'ضَحِكَ', 'ضَمِنَ', 'ضَرَرٌ'],
   'ط': ['طَبَعَ', 'طَلَبَ', 'طَرَقَ', 'طَهِرَ', 'طَبَقٌ'],
   'ظ': ['ظَلَمَ', 'ظَهَرَ', 'ظَنَّكَ', 'ظَفِرَ', 'ظُلْمٌ'],
-
-  // Module 7: Ain, Ghain, Fa, Qaf, Kaf, Lam, Mim
   'ع': ['عَبَدَ', 'عَلِمَ', 'عَمِلَ', 'عَفَاَ', 'عَدَلَ', 'عَجِبَ'],
   'غ': ['غَفَرَ', 'غَلَبَ', 'غَضِبَ', 'غَمَرَ', 'غَلَقٌ'],
   'ف': ['فَعَلَ', 'فَتَحَ', 'فَرِحَ', 'فَهِمَ', 'فَطَرَ', 'فَحَصَ'],
@@ -73,24 +64,12 @@ const quranicPureVowelPool: Record<string, string[]> = {
   'ك': ['كَفَرَ', 'كَتَبَ', 'كَسَبَ', 'كَذَبَ', 'كَبُرَ', 'كَرِمَ'],
   'ل': ['لَعَبَ', 'لَقِيَ', 'لَحِقَ', 'لَبِسَ', 'لَحَمَ', 'لَبَنٌ'],
   'م': ['مَلَكَ', 'مَكَرَ', 'مَدَحَ', 'مَنَعَ', 'مَرَضٌ', 'مَسَحَ'],
-
-  // Module 8-10: Nun, Wau, Ha, Hamzah, Ya
   'ن': ['نَظَرَ', 'نَصَرَ', 'نَفَعَ', 'نَحَرَ', 'نَجَحَ', 'نَدِمَ'],
   'و': ['وَجَدَ', 'وَضَعَ', 'وَعَدَ', 'وَصَلَ', 'وَقَفَ', 'وَلَدَ'],
   'هـ': ['هَدَىَ', 'هَلَكَ', 'هَزَمَ', 'هَجَرَ', 'هَبَطَ', 'هَفَاَ'],
   'ء': ['أَمَرَ', 'أَخَذَ', 'أَبَىَ', 'أَثِرَ', 'أَسِفَ'],
   'ي': ['يَسِرَ', 'يَفَعَ', 'يَبِسَ', 'يَمَنَ', 'يَقِظَ', 'يَسَرَ']
 };
-
-export function formatHarfWithHarakat(char: string, name: string, harakat: string): string {
-  if (name === 'Alif') {
-    if (harakat === 'ِ' || harakat === 'ٍ') {
-      return `إ${harakat}`;
-    }
-    return `أ${harakat}`;
-  }
-  return `${char}${harakat}`;
-}
 
 export function generateTanwinForms(letters: HarfCard[]): HarfCard[] {
   let idCounter = 1;
@@ -132,13 +111,11 @@ export function generateSkala2BarisForms(letters: HarfCard[]): HarfCard[] {
   return result;
 }
 
-// Function to generate and cycle authentic Quranic words using pure short vowels/tanwin
 export function generateQuranicPureForms(letters: HarfCard[]): HarfCard[] {
   let idCounter = 1;
   const result: HarfCard[] = [];
 
   letters.forEach((item) => {
-    // Fallback if key missing
     const words = quranicPureVowelPool[item.arabic] || [item.arabic + 'َ' + item.arabic + 'َ' + item.arabic + 'َ'];
     words.forEach((w) => {
       result.push({
@@ -165,7 +142,7 @@ function getModuleSubset(mod: number): HarfCard[] {
     case 3: return skala2Alphabet.slice(17, 30).filter((item) => item.arabic !== '\uFEFB');
     case 4: return skala2Alphabet.slice(0, 4);       // Alif to Tha
     case 5: return skala2Alphabet.slice(4, 11);      // Jim to Zai
-    case 6: return skala2Alphabet.slice(11, 17);     // Sin to Zha
+    case 6: return skala2Alphabet.slice(11, 17);     // Sin to Zho
     case 7: return skala2Alphabet.slice(17, 24);     // Ain to Mim
     case 8: return skala2Alphabet.slice(24, 30).filter((item) => item.arabic !== '\uFEFB'); // Nun to Ya
     case 9: return skala2Alphabet.slice(0, 30).filter((item) => item.arabic !== '\uFEFB');

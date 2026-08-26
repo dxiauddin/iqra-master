@@ -2,7 +2,6 @@
 
 import { use } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 interface PageProps {
   params: Promise<{ id: string; modNum: string }>;
@@ -23,11 +22,11 @@ export default function ModuleTestPage({ params }: PageProps) {
       <div className="max-w-xl mx-auto w-full pt-6 px-4 flex justify-between items-center relative z-20">
         <Link 
           href={`/skala/${id}/module/${modNum}`} 
-          className="text-xs text-zinc-400 hover:text-white transition-colors"
+          className="text-[15px] text-zinc-400 hover:text-white transition-colors"
         >
           &larr; Kembali ke Modul {modNum}
         </Link>
-        <span className="text-xs font-semibold text-yellow-400 tracking-wide">
+        <span className="text-[15px] font-semibold text-yellow-400 tracking-wide">
           Ujian Modul {modNum} (Skala {id})
         </span>
       </div>
@@ -37,19 +36,19 @@ export default function ModuleTestPage({ params }: PageProps) {
         
         <div className="w-full bg-zinc-950/85 backdrop-blur-3xl text-white rounded-[22px] py-8 px-6 border border-white/15 shadow-2xl">
           <div className="mb-4">
-            <span className="text-[10px] uppercase tracking-wider font-semibold text-yellow-400 bg-yellow-500/10 px-2.5 py-1 rounded-full">
+            <span className="text-[12px] uppercase tracking-wider font-semibold text-yellow-400 bg-yellow-500/10 px-2.5 py-1 rounded-full">
               Penilaian Modul {modNum}
             </span>
-            <h2 className="text-base sm:text-lg font-bold mt-3 text-white">
+            <h2 className="text-lg sm:text-xl font-bold mt-3 text-white">
               Ujian Penguasaan Pembelajaran Modul {modNum}
             </h2>
-            <p className="text-xs text-zinc-400 mt-1">
+            <p className="text-[15px] text-zinc-400 mt-1">
               Jawab soalan di bawah untuk menguji kefahaman anda bagi modul ini.
             </p>
           </div>
 
           {/* Test Questions Placeholder / Interactive Flow */}
-          <div className="py-12 text-center text-zinc-400 text-xs border border-dashed border-zinc-800 rounded-xl my-6">
+          <div className="py-12 text-center text-zinc-400 text-[15px] border border-dashed border-zinc-800 rounded-xl my-6">
             [ Soalan Interaktif Ujian Modul {modNum} untuk Skala {id} dipaparkan di sini ]
           </div>
 
@@ -58,7 +57,7 @@ export default function ModuleTestPage({ params }: PageProps) {
               alert(`Tahniah! Anda telah berjaya menghantar Ujian Modul ${modNum}.`);
               window.location.href = `/skala/${id}`;
             }}
-            className="w-full py-2.5 rounded-full text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-lg transition-transform hover:scale-105 cursor-pointer"
+            className="w-full py-2.5 rounded-full text-[15px] font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-lg transition-transform hover:scale-105 cursor-pointer"
           >
             Hantar Jawapan Modul
           </button>
@@ -67,7 +66,7 @@ export default function ModuleTestPage({ params }: PageProps) {
       </div>
 
       {/* Footer */}
-      <footer className="w-full pt-3 pb-3 border-t border-blue-900/40 text-center text-xs text-blue-300 relative z-10 shrink-0 font-sans">
+      <footer className="w-full pt-3 pb-3 border-t border-blue-900/40 text-center text-[15px] text-blue-300 relative z-10 shrink-0 font-sans">
         &copy; {new Date().getFullYear()} Iqra&apos; Master By DxiaTech. All Rights Reserved.
       </footer>
     </main>

@@ -66,10 +66,10 @@ export default function SignupPage() {
       {popupMessage && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4 animate-fadeIn">
           <div className="bg-zinc-950 border border-white/20 rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl space-y-4">
-            <p className="text-sm text-zinc-200 font-medium">{popupMessage}</p>
+            <p className="text-[15px] text-zinc-200 font-medium">{popupMessage}</p>
             <button
               onClick={() => setPopupMessage(null)}
-              className="py-2 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white transition-all shadow-md"
+              className="py-2.5 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-[15px] font-bold text-white transition-all shadow-md"
             >
               Tutup
             </button>
@@ -95,7 +95,7 @@ export default function SignupPage() {
           />
         </Link>
         <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">Iqra&apos; Master</h1>
-        <p className="text-xs text-zinc-400">Sila daftar akaun baru untuk menyimpan rekod pencapaian anda.</p>
+        <p className="text-[15px] text-zinc-300">Sila daftar akaun baru untuk menyimpan rekod pencapaian anda.</p>
       </div>
 
       <section className="max-w-md mx-auto w-full pt-2 pb-12 flex-1 flex flex-col items-center justify-start relative z-10">
@@ -109,19 +109,19 @@ export default function SignupPage() {
           <div className="relative p-[1.5px] rounded-3xl overflow-hidden w-full shadow-[0_15px_35px_rgba(0,0,0,0.8)]">
             <div className="absolute inset-[-150%] bg-[conic-gradient(from_0deg,#3B82F6,#FACC15,#EF4444,#3B82F6)] animate-spin-slow" />
 
-            <div className="relative w-full bg-zinc-950/95 backdrop-blur-3xl text-white rounded-[22px] pt-5 pb-7 px-6 flex flex-col items-center gap-6 border border-white/10">
+            <div className="relative w-full bg-zinc-950/95 backdrop-blur-3xl text-white rounded-[22px] pt-6 pb-8 px-6 flex flex-col items-center gap-6 border border-white/10">
               
               <div className="w-full relative flex items-center justify-center pb-1">
-                <span className="text-xs font-semibold tracking-wide text-zinc-300">
+                <span className="text-[15px] font-semibold tracking-wide text-zinc-200">
                   Daftar Akaun Baru
                 </span>
                 
                 <Link
                   href="/login"
-                  className="absolute right-0 w-7 h-7 rounded-full flex items-center justify-center bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white transition-all border border-white/20 shadow-sm"
+                  className="absolute right-0 w-8 h-8 rounded-full flex items-center justify-center bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white transition-all border border-white/20 shadow-sm"
                   title="Batal / Kembali ke Log Masuk"
                 >
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </Link>
@@ -130,7 +130,7 @@ export default function SignupPage() {
               <div className="flex flex-col gap-3 w-full">
                 <button 
                   onClick={() => setPopupMessage('Google Sign-Up akan datang!')}
-                  className="w-full py-2.5 px-4 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-white/15 text-xs font-semibold text-zinc-200 transition-all flex items-center justify-center gap-2.5 shadow-sm group"
+                  className="w-full py-3 px-4 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-white/15 text-[15px] font-semibold text-zinc-200 transition-all flex items-center justify-center gap-2.5 shadow-sm group"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
                     <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.2 8.9 5 12 5z"/>
@@ -143,7 +143,7 @@ export default function SignupPage() {
 
                 <button 
                   onClick={() => setPopupMessage('Facebook Sign-Up akan datang!')}
-                  className="w-full py-2.5 px-4 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-white/15 text-xs font-semibold text-zinc-200 transition-all flex items-center justify-center gap-2.5 shadow-sm group"
+                  className="w-full py-3 px-4 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-white/15 text-[15px] font-semibold text-zinc-200 transition-all flex items-center justify-center gap-2.5 shadow-sm group"
                 >
                   <svg className="w-4 h-4 fill-[#1877F2]" viewBox="0 0 24 24">
                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
@@ -154,41 +154,41 @@ export default function SignupPage() {
 
               <div className="flex items-center w-full my-1 cursor-pointer" onClick={() => setShowEmailModal(!showEmailModal)}>
                 <div className="flex-grow border-t border-zinc-800"></div>
-                <span className="px-3 text-[10px] text-emerald-400 font-semibold tracking-wider hover:underline">
+                <span className="px-3 text-[15px] text-emerald-400 font-semibold tracking-wider hover:underline">
                   {showEmailModal ? 'Tutup e-mail' : 'Atau melalui e-mail'}
                 </span>
                 <div className="flex-grow border-t border-zinc-800"></div>
               </div>
 
               {showEmailModal && (
-                <form onSubmit={handleEmailSignup} className="flex flex-col gap-4 w-full bg-zinc-900/80 p-4 rounded-2xl border border-white/10 animate-fadeIn">
+                <form onSubmit={handleEmailSignup} className="flex flex-col gap-4 w-full bg-zinc-900/80 p-4.5 rounded-2xl border border-white/10 animate-fadeIn">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-medium text-zinc-400">Nama Penuh</label>
+                    <label className="text-[15px] font-medium text-zinc-300">Nama Penuh</label>
                     <input 
                       type="text" 
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Nama anda"
                       required
-                      className="w-full px-3 py-2 rounded-xl bg-zinc-950 border border-white/15 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-white/15 text-[15px] text-white focus:outline-none focus:border-emerald-500 transition-colors"
                     />
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-medium text-zinc-400">E-mail</label>
+                    <label className="text-[15px] font-medium text-zinc-300">E-mail</label>
                     <input 
                       type="email" 
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="nama@contoh.com"
                       required
-                      className="w-full px-3 py-2 rounded-xl bg-zinc-950 border border-white/15 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-white/15 text-[15px] text-white focus:outline-none focus:border-emerald-500 transition-colors"
                     />
                   </div>
 
                   {/* Password Input with Eye Toggle */}
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-medium text-zinc-400">Kata Laluan</label>
+                    <label className="text-[15px] font-medium text-zinc-300">Kata Laluan</label>
                     <div className="relative">
                       <input 
                         type={showPassword ? 'text' : 'password'} 
@@ -196,18 +196,18 @@ export default function SignupPage() {
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
                         required
-                        className="w-full px-3 py-2 pr-9 rounded-xl bg-zinc-950 border border-white/15 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                        className="w-full px-3.5 py-2.5 pr-10 rounded-xl bg-zinc-950 border border-white/15 text-[15px] text-white focus:outline-none focus:border-emerald-500 transition-colors"
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white transition-colors"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white transition-colors"
                         title={showPassword ? 'Sembunyikan kata laluan' : 'Papar kata laluan'}
                       >
                         {showPassword ? (
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m14.41 14.41l-3.59-3.59"/></svg>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m14.41 14.41l-3.59-3.59"/></svg>
                         ) : (
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                         )}
                       </button>
                     </div>
@@ -215,7 +215,7 @@ export default function SignupPage() {
 
                   {/* Confirm Password Input with Eye Toggle */}
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-medium text-zinc-400">Sahkan Kata Laluan</label>
+                    <label className="text-[15px] font-medium text-zinc-300">Sahkan Kata Laluan</label>
                     <div className="relative">
                       <input 
                         type={showConfirmPassword ? 'text' : 'password'} 
@@ -223,18 +223,18 @@ export default function SignupPage() {
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         placeholder="••••••••"
                         required
-                        className="w-full px-3 py-2 pr-9 rounded-xl bg-zinc-950 border border-white/15 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors"
+                        className="w-full px-3.5 py-2.5 pr-10 rounded-xl bg-zinc-950 border border-white/15 text-[15px] text-white focus:outline-none focus:border-emerald-500 transition-colors"
                       />
                       <button
                         type="button"
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white transition-colors"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white transition-colors"
                         title={showConfirmPassword ? 'Sembunyikan kata laluan' : 'Papar kata laluan'}
                       >
                         {showConfirmPassword ? (
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m14.41 14.41l-3.59-3.59"/></svg>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m14.41 14.41l-3.59-3.59"/></svg>
                         ) : (
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                         )}
                       </button>
                     </div>
@@ -242,14 +242,14 @@ export default function SignupPage() {
 
                   <button 
                     type="submit"
-                    className="w-full mt-2 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white transition-all shadow-md"
+                    className="w-full mt-2 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-[15px] font-bold text-white transition-all shadow-md"
                   >
                     Daftar Akaun
                   </button>
                 </form>
               )}
 
-              <div className="text-center text-xs text-zinc-400 pt-1">
+              <div className="text-center text-[15px] text-zinc-300 pt-1">
                 Sudah mempunyai akaun?{' '}
                 <Link href="/login" className="text-emerald-400 font-semibold hover:underline">
                   Log masuk
@@ -261,7 +261,7 @@ export default function SignupPage() {
         </div>
       </section>
 
-      <footer className="w-full pt-4 pb-4 border-t border-emerald-900/40 text-center text-xs text-emerald-300/80 relative z-10 font-sans">
+      <footer className="w-full pt-4 pb-4 border-t border-emerald-900/40 text-center text-[15px] text-emerald-300/80 relative z-10 font-sans">
         &copy; {new Date().getFullYear()} Iqra&apos; Master By DxiaTech. All Rights Reserved.
       </footer>
     </main>

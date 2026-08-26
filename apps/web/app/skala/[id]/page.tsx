@@ -231,13 +231,13 @@ export default function SkalaDashboardPage({ params }: PageProps) {
       </svg>
 
       {/* Main Content Area */}
-      <div className="w-full max-w-lg mx-auto flex flex-col items-center relative z-15 space-y-3 pt-6 pb-24 flex-1">
+      <div className="w-full max-w-lg mx-auto flex flex-col items-center relative z-15 space-y-4 pt-6 pb-28 flex-1">
         
-        {/* Hero / Header Section with Ring Pencapaian % and Active Module Indicator */}
-        <div className="w-full text-center space-y-2 flex flex-col items-center">
+        {/* Hero / Header Section */}
+        <div className="w-full text-center space-y-2.5 flex flex-col items-center">
           
-          {/* Main Percentage Ring with Professional Active Status Label Inside */}
-          <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center drop-shadow-2xl mb-1">
+          {/* Main Percentage Ring */}
+          <div className="relative w-32 h-32 sm:w-36 sm:h-36 flex items-center justify-center drop-shadow-2xl mb-1">
             <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
               <path
                 className="text-white/10"
@@ -258,17 +258,17 @@ export default function SkalaDashboardPage({ params }: PageProps) {
               />
             </svg>
             
-            {/* Inner Ring Text: Status label on top, Active Module in the middle, Percentage below */}
+            {/* Inner Ring Text */}
             <div className="absolute flex flex-col items-center justify-center text-center">
-              <span className="text-[8px] uppercase tracking-widest font-semibold text-white">
+              <span className="text-[12px] uppercase tracking-wider font-semibold text-zinc-300">
                 Sedang Belajar
               </span>
-              <span className="text-[10px] sm:text-xs uppercase tracking-wider font-extrabold text-emerald-400">
+              <span className="text-[15px] uppercase tracking-wider font-extrabold text-emerald-400 my-0.5">
                 Modul {currentModule}
               </span>
-              <span className="text-xs sm:text-sm font-bold font-mono text-white flex items-center gap-1">
+              <span className="text-[15px] font-bold font-mono text-white flex items-center gap-1">
                 {isPending ? (
-                  <span className="w-2 h-2 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin" />
+                  <span className="w-2.5 h-2.5 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin" />
                 ) : (
                   `${overallPercent}%`
                 )}
@@ -276,32 +276,32 @@ export default function SkalaDashboardPage({ params }: PageProps) {
             </div>
           </div>
           
-          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-white" style={{ letterSpacing: '-0.02em' }}>
+          <h1 className="text-3xl font-bold tracking-tight text-white">
             Skala {id}
           </h1>
 
-          {/* Bulleted Subtitle List */}
-          <ul className="text-xs text-zinc-300 font-normal pt-1 space-y-1 text-left max-w-xs mx-auto" style={{ letterSpacing: '-0.005em' }}>
+          {/* Bulleted Subtitle List standardized to 15px */}
+          <ul className="text-[15px] text-zinc-200 font-normal pt-1 space-y-1.5 text-left max-w-sm mx-auto w-full px-4">
             {isSkala2 ? (
               <>
-                <li className="flex items-center">
-                  <span className="mr-2 text-blue-400">•</span>
-                  <span>Mengenal baris tanwin dan sabdu</span>
+                <li className="flex items-start whitespace-normal break-words">
+                  <span className="mr-2 text-blue-400 shrink-0 font-bold">•</span>
+                  <span className="leading-snug">Mengenal baris tanwin dan sabdu</span>
                 </li>
-                <li className="flex items-center">
-                  <span className="mr-2 text-blue-400">•</span>
-                  <span>Mengenal bentuk huruf bersambung</span>
+                <li className="flex items-start whitespace-normal break-words">
+                  <span className="mr-2 text-blue-400 shrink-0 font-bold">•</span>
+                  <span className="leading-snug">Mengenal bentuk huruf bersambung</span>
                 </li>
               </>
             ) : (
               <>
-                <li className="flex items-center">
-                  <span className="mr-2 text-blue-400">•</span>
-                  <span>Mengenal huruf hijaiyah</span>
+                <li className="flex items-start whitespace-normal break-words">
+                  <span className="mr-2 text-blue-400 shrink-0 font-bold">•</span>
+                  <span className="leading-snug">Mengenal huruf hijaiyah</span>
                 </li>
-                <li className="flex items-center">
-                  <span className="mr-2 text-blue-400">•</span>
-                  <span>Mengenal baris atas, bawah dan depan</span>
+                <li className="flex items-start whitespace-normal break-words">
+                  <span className="mr-2 text-blue-400 shrink-0 font-bold">•</span>
+                  <span className="leading-snug">Mengenal baris atas, bawah dan depan</span>
                 </li>
               </>
             )}
@@ -309,7 +309,7 @@ export default function SkalaDashboardPage({ params }: PageProps) {
         </div>
 
         {/* Modules Horizontal Sliding Carousel with Border Beam */}
-        <section className="w-full pt-2 pb-1 relative z-10">
+        <section className="w-full pt-3 pb-2 relative z-10">
           <div className="relative w-full">
             {/* Spinning Glow Backdrop */}
             <div className="absolute -inset-1 rounded-3xl overflow-hidden opacity-30 blur-md pointer-events-none">
@@ -326,11 +326,11 @@ export default function SkalaDashboardPage({ params }: PageProps) {
                 onMouseLeave={handleMouseLeave}
                 onMouseUp={handleMouseUp}
                 onMouseMove={handleMouseMove}
-                className={`relative w-full bg-zinc-950 backdrop-blur-3xl text-white rounded-[22px] py-4 px-0 flex flex-col gap-3 overflow-hidden border border-white/10 ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
+                className={`relative w-full bg-zinc-950 backdrop-blur-3xl text-white rounded-[22px] py-5 px-0 flex flex-col gap-3.5 overflow-hidden border border-white/10 ${isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'}`}
               >
                 
-                {/* Pinned Instruction Text */}
-                <p className="text-xs text-zinc-300 font-normal text-center leading-snug pointer-events-none px-4" style={{ letterSpacing: '-0.005em' }}>
+                {/* Pinned Instruction Text standardized to 15px */}
+                <p className="text-[15px] text-zinc-300 font-medium text-center leading-snug pointer-events-none px-4">
                   Pilih modul pembelajaran.
                 </p>
 
@@ -339,7 +339,7 @@ export default function SkalaDashboardPage({ params }: PageProps) {
                   ref={scrollRef}
                   className="w-full overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                 >
-                  <div className="flex gap-3 w-max py-1 px-3">
+                  <div className="flex gap-3.5 w-max py-1 px-4">
                     {modulesData.map((mod) => {
                       const isLocked = mod.num > 1 && mod.num > currentModule && (moduleProgressMap[mod.num - 1] || 0) < 100;
                       return (
@@ -348,26 +348,26 @@ export default function SkalaDashboardPage({ params }: PageProps) {
                           href={`/skala/${id}/module/${mod.num}`}
                           onClick={(e) => handleModuleClick(e, mod.num)}
                           draggable={false}
-                          className={`w-52 sm:w-56 rounded-xl p-3.5 flex flex-col justify-start h-32 transition-all shadow-md group border shrink-0 text-center relative ${
+                          className={`w-56 sm:w-60 rounded-2xl p-4 flex flex-col justify-start h-36 transition-all shadow-md group border shrink-0 text-center relative ${
                             isLocked 
                               ? 'bg-zinc-950/60 border-white/5 opacity-60 cursor-not-allowed' 
                               : 'bg-zinc-900/80 hover:bg-zinc-900 border-white/10'
                           }`}
                         >
-                          <div className="flex justify-between items-center w-full mb-2 pointer-events-none">
-                            <h3 className={`text-xs sm:text-sm font-bold tracking-tight text-white ${theme.hoverColor} transition-colors`}>
+                          <div className="flex justify-between items-center w-full mb-2.5 pointer-events-none">
+                            <h3 className={`text-[15px] font-bold tracking-tight text-white ${theme.hoverColor} transition-colors`}>
                               {mod.title}
                             </h3>
                             {isLocked && (
-                              <span className="text-xs text-zinc-400 select-none" title="Berkunci">
+                              <span className="text-[15px] text-zinc-400 select-none" title="Berkunci">
                                 🔒
                               </span>
                             )}
                           </div>
 
                           <ul className="space-y-1 text-left pointer-events-none mx-auto w-full">
-                            <li className="text-[10px] sm:text-[11px] text-zinc-300 leading-tight flex items-start">
-                              <span className="mr-1.5 text-blue-400">•</span>
+                            <li className="text-[15px] text-zinc-200 leading-snug flex items-start whitespace-normal break-words">
+                              <span className="mr-2 text-blue-400 shrink-0 font-bold">•</span>
                               <span className="line-clamp-2">{mod.subtitle}</span>
                             </li>
                           </ul>
@@ -383,27 +383,26 @@ export default function SkalaDashboardPage({ params }: PageProps) {
         </section>
 
         {/* Bottom Section */}
-        <div className="w-full pt-1 flex flex-col items-center text-center space-y-2">
-          <span className="text-xs font-medium text-zinc-400">Atau</span>
+        <div className="w-full pt-2 flex flex-col items-center text-center space-y-3">
+          <span className="text-[15px] font-medium text-zinc-400">Atau</span>
           
           <div className="flex justify-center">
             <Link 
               href={`/skala/${id}/test?type=skala`}
-              className={`inline-flex items-center justify-center py-2 px-6 rounded-full font-medium text-xs text-white shadow-lg transition-transform hover:scale-105 bg-transparent border-2 ${theme.testBtn}`}
-              style={{ letterSpacing: '-0.01em' }}
+              className={`inline-flex items-center justify-center py-2.5 px-7 rounded-full font-semibold text-[15px] text-white shadow-lg transition-transform hover:scale-105 bg-transparent border-2 ${theme.testBtn}`}
             >
               Mula Ujian Skala {id}
             </Link>
           </div>
 
-          <p className="text-xs text-zinc-300 font-normal leading-snug max-w-sm pb-1" style={{ letterSpacing: '-0.005em' }}>
-            Sila ambil ujian skala ini untuk menilai pencapaian keseluruhan anda sebelum beralih ke Skala 2.
+          <p className="text-[15px] text-zinc-300 font-normal leading-relaxed max-w-sm pb-1 px-2">
+            Sila ambil ujian skala ini untuk menilai pencapaian keseluruhan anda sebelum beralih ke Skala {parseInt(id) + 1}.
           </p>
 
           {/* Development Reset Button */}
           <button
             onClick={handleReset}
-            className="text-[10px] text-red-400 hover:text-red-300 underline tracking-wider uppercase pt-1 transition-colors cursor-pointer"
+            className="text-[15px] text-red-400 hover:text-red-300 underline tracking-wider uppercase pt-1 transition-colors cursor-pointer"
           >
             [Dev] Reset Semua Pencapaian Skala {id}
           </button>
@@ -415,28 +414,28 @@ export default function SkalaDashboardPage({ params }: PageProps) {
       {lockedPopupModule !== null && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center px-4 animate-in fade-in duration-200">
           <div className="bg-zinc-950 border border-white/20 rounded-3xl p-6 max-w-sm w-full text-center space-y-4 shadow-2xl relative">
-            <div className="w-12 h-12 bg-red-500/10 border border-red-500/30 rounded-2xl mx-auto flex items-center justify-center text-xl">
+            <div className="w-12 h-12 bg-red-500/10 border border-red-500/30 rounded-2xl mx-auto flex items-center justify-center text-[15px]">
               🔒
             </div>
             
-            <div className="space-y-1">
-              <h3 className="text-base font-bold text-white">Modul Berkunci</h3>
-              <p className="text-xs text-zinc-300 leading-relaxed">
+            <div className="space-y-1.5">
+              <h3 className="text-[15px] font-bold text-white">Modul Berkunci</h3>
+              <p className="text-[15px] text-zinc-200 leading-relaxed">
                 Anda perlu mengambil dan lulus <span className="text-emerald-400 font-semibold">Ujian Modul {lockedPopupModule - 1}</span> terlebih dahulu sebelum anda boleh mengakses Modul {lockedPopupModule}.
               </p>
             </div>
 
-            <div className="pt-2 flex flex-col gap-2">
+            <div className="pt-2 flex flex-col gap-2.5">
               <Link
                 href={`/skala/${id}/module/${lockedPopupModule - 1}/test`}
-                className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs shadow-lg transition-all"
+                className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-[15px] shadow-lg transition-all"
               >
                 Ambil Ujian Modul {lockedPopupModule - 1} Sekarang
               </Link>
               
               <button
                 onClick={() => setLockedPopupModule(null)}
-                className="w-full py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-400 font-medium text-xs border border-white/10 transition-all cursor-pointer"
+                className="w-full py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 font-medium text-[15px] border border-white/10 transition-all cursor-pointer"
               >
                 Tutup
               </button>
@@ -446,7 +445,7 @@ export default function SkalaDashboardPage({ params }: PageProps) {
       )}
 
       {/* Footer */}
-      <footer className={`w-full pt-3 pb-3 border-t ${theme.footerBorder} text-center text-xs text-white relative z-10 font-sans shrink-0`}>
+      <footer className={`w-full pt-3 pb-3 border-t ${theme.footerBorder} text-center text-[15px] text-white relative z-10 font-sans shrink-0`}>
         &copy; {new Date().getFullYear()} Iqra&apos; Master By DxiaTech. All Rights Reserved.
       </footer>
     </main>

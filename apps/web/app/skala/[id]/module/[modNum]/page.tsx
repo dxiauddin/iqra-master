@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { getModuleProgress, saveModuleProgress } from '@/app/actions';
 import { skala1Alphabet, allBarisForms as skala1AllBaris, getSkala1IntensiveForms, getSkala1PriorForms } from '@/lib/skala1-curriculum';
 import { skala2Alphabet, skala2AllTanwinForms, getSkala2IntensiveForms, getSkala2PriorForms } from '@/lib/skala2-curriculum';
+import { playLetterAudio } from '@/lib/arabic/audio-map';
 
 interface PageProps {
   params: Promise<{ id: string; modNum: string }>;
@@ -18,10 +19,10 @@ export default function ModuleDetailPage({ params }: PageProps) {
   const totalPages = 3;
   const [isLoading, setIsLoading] = useState(true);
 
-  // Exact matching theme configuration from your dashboard
+  // Dynamic theme configuration ensuring all modules match the Skala theme accurately
   const getTheme = (skalaId: string) => {
     switch (skalaId) {
-      case '1': // Green Theme (#00472B)
+      case '1':
         return {
           bgGradient: 'linear-gradient(to bottom, #00472B 0%, #000000 30%, #000000 70%, #00472B 100%)',
           ambientGlow: 'bg-[#00472B]/30',
@@ -33,7 +34,7 @@ export default function ModuleDetailPage({ params }: PageProps) {
           gradientStops: '#00472B,#10B981,#047857,#00472B',
           ringColor: '#10B981',
         };
-      case '2': // Purple Theme (#54009E)
+      case '2':
         return {
           bgGradient: 'linear-gradient(to bottom, #54009E 0%, #000000 30%, #000000 70%, #54009E 100%)',
           ambientGlow: 'bg-[#54009E]/30',
@@ -45,7 +46,7 @@ export default function ModuleDetailPage({ params }: PageProps) {
           gradientStops: '#54009E,#A855F7,#7C3AED,#54009E',
           ringColor: '#A855F7',
         };
-      case '3': // Red Theme (#9E0000)
+      case '3':
         return {
           bgGradient: 'linear-gradient(to bottom, #9E0000 0%, #000000 30%, #000000 70%, #9E0000 100%)',
           ambientGlow: 'bg-[#9E0000]/30',
@@ -57,7 +58,7 @@ export default function ModuleDetailPage({ params }: PageProps) {
           gradientStops: '#9E0000,#EF4444,#B91C1C,#9E0000',
           ringColor: '#EF4444',
         };
-      case '4': // Yellow Theme (#FFF100)
+      case '4':
         return {
           bgGradient: 'linear-gradient(to bottom, #FFF100 0%, #000000 30%, #000000 70%, #FFF100 100%)',
           ambientGlow: 'bg-[#FFF100]/20',
@@ -69,7 +70,7 @@ export default function ModuleDetailPage({ params }: PageProps) {
           gradientStops: '#FFF100,#EAB308,#CA8A04,#FFF100',
           ringColor: '#FFF100',
         };
-      case '5': // White Theme
+      case '5':
         return {
           bgGradient: 'linear-gradient(to bottom, #FFFFFF 0%, #000000 30%, #000000 70%, #FFFFFF 100%)',
           ambientGlow: 'bg-white/15',
@@ -81,7 +82,7 @@ export default function ModuleDetailPage({ params }: PageProps) {
           gradientStops: '#FFFFFF,#A1A1AA,#52525B,#FFFFFF',
           ringColor: '#FFFFFF',
         };
-      case '6': // Pink Theme (#FF00F7)
+      case '6':
         return {
           bgGradient: 'linear-gradient(to bottom, #FF00F7 0%, #000000 30%, #000000 70%, #FF00F7 100%)',
           ambientGlow: 'bg-[#FF00F7]/25',
@@ -113,7 +114,6 @@ export default function ModuleDetailPage({ params }: PageProps) {
   const isSkala1 = id === '1';
   const isSkala2 = id === '2';
 
-  // Page 1 Generation
   const page1Letters = useMemo(() => {
     if (isSkala2) {
       const intensive = getSkala2IntensiveForms(moduleNumber);
@@ -144,7 +144,6 @@ export default function ModuleDetailPage({ params }: PageProps) {
     return skala1Alphabet.slice(0, 30).map((item, idx) => ({ id: idx + 1, arabic: item.arabic, name: item.name }));
   }, [isSkala1, isSkala2, moduleNumber]);
 
-  // Page 2 & 3 Generation
   const generateMixedPages = () => {
     if (isSkala2) {
       const intensive = getSkala2IntensiveForms(moduleNumber);
@@ -238,17 +237,9 @@ export default function ModuleDetailPage({ params }: PageProps) {
       });
     }
 
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const speechText = item.arabic === '\uFEFB' ? 'Lam Alif' : item.arabic.replace(/[ًٌٍَُِْ\s]/g, '');
-      const utterance = new SpeechSynthesisUtterance(speechText);
-      utterance.lang = 'ar-SA';
-      utterance.rate = 0.8;
-      window.speechSynthesis.speak(utterance);
-    }
+    playLetterAudio(item.name);
   };
 
-  // Determine grid layout: 3 columns for Skala 1 (mods 2-8, page 1) and Skala 2 Modules 4-10 (all pages 1, 2, 3).
   const isThreeColumnGrid = 
     (currentPage === 1 && isSkala1 && moduleNumber > 1 && moduleNumber < 9) || 
     (isSkala2 && moduleNumber >= 4);
@@ -277,20 +268,20 @@ export default function ModuleDetailPage({ params }: PageProps) {
               <path className="text-white/10" strokeWidth="3.2" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
               <path className="transition-all duration-500 ease-out" stroke={theme.ringColor} strokeWidth="3.2" strokeDasharray="100" strokeDashoffset={100 - progressPercent} strokeLinecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
             </svg>
-            <span className="absolute text-sm sm:text-base font-bold font-mono text-white flex items-center gap-1">
+            <span className="absolute text-[15px] font-bold font-mono text-white flex items-center gap-1">
               {isLoading ? <span className={`w-3 h-3 border-2 ${theme.accentText} border-t-transparent rounded-full animate-spin`} /> : `${progressPercent}%`}
             </span>
           </div>
 
-          <span className={`text-[10px] font-semibold ${theme.accentText} uppercase tracking-widest block flex items-center justify-center gap-2`}>
+          <span className={`text-[12px] font-semibold ${theme.accentText} uppercase tracking-widest block flex items-center justify-center gap-2`}>
             Skala {id} &bull; Modul {modNum} 
-            {isPending && <span className="text-[9px] text-yellow-400 animate-pulse">(Menyimpan...)</span>}
+            {isPending && <span className="text-[12px] text-yellow-400 animate-pulse">(Menyimpan...)</span>}
           </span>
-          <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight">
+          <h1 className="text-2xl font-extrabold tracking-tight">
             {moduleNumber === 1 && isSkala1 ? 'Pengenalan Huruf Hijaiyah' : `Modul Pembelajaran Asas ${modNum}`}
           </h1>
           
-          <ul className="text-xs text-zinc-300 font-normal pt-1 space-y-1 text-left max-w-xs mx-auto">
+          <ul className="text-[15px] text-zinc-300 font-normal pt-1 space-y-1 text-left max-w-xs mx-auto">
             <li className="flex items-center">
               <span className={`mr-2 ${theme.accentText}`}>•</span>
               <span>{moduleNumber === 1 && isSkala1 ? 'Mengenal, mengecam dan menghafal huruf hijaiyah' : 'Latihan intensif harf baru dan ulangkaji berterusan'}</span>
@@ -298,34 +289,28 @@ export default function ModuleDetailPage({ params }: PageProps) {
           </ul>
         </div>
 
+        {/* Modules Content Box with Multi-Color Spinning Border Beam */}
         <section className="w-full pt-2 pb-2 relative z-10">
           <div className="relative w-full">
-            {/* Ambient Background Glow matching the exact theme gradient stops */}
+            {/* Spinning Glow Backdrop */}
             <div className="absolute -inset-1 rounded-3xl overflow-hidden opacity-30 blur-md pointer-events-none">
-              <div 
-                className="absolute inset-[-150%] animate-spin-slow" 
-                style={{ background: `conic-gradient(from 0deg, ${theme.gradientStops})` }}
-              />
+              <div className="absolute inset-[-150%] bg-[conic-gradient(from_0deg,#3B82F6,#FACC15,#EF4444,#3B82F6)] animate-spin-slow" />
             </div>
 
-            {/* Main Outer Box with Border Beam Effect */}
+            {/* Spinning Border Container */}
             <div className="relative p-[1.5px] rounded-3xl overflow-hidden w-full shadow-[0_15px_35px_rgba(0,0,0,0.8)]">
-              {/* Border Beam Rotating Conic Gradient using exact theme stops */}
-              <div 
-                className="absolute inset-[-150%] animate-spin-slow opacity-90" 
-                style={{ background: `conic-gradient(from 0deg, transparent 0deg, transparent 270deg, ${theme.ringColor} 360deg)` }}
-              />
+              <div className="absolute inset-[-150%] bg-[conic-gradient(from_0deg,#3B82F6,#FACC15,#EF4444,#3B82F6)] animate-spin-slow" />
               
               <div className="w-full bg-zinc-950 backdrop-blur-3xl text-white rounded-[22px] py-6 px-4 sm:px-6 flex flex-col items-center gap-4 border border-white/10 relative">
                 
                 {isLoading && (
                   <div className="absolute inset-0 bg-zinc-950/80 backdrop-blur-sm z-20 flex flex-col items-center justify-center rounded-[22px]">
                     <div className="w-8 h-8 border-3 border-current border-t-transparent rounded-full animate-spin mb-2" />
-                    <span className="text-xs text-zinc-300 font-medium">Memuatkan pencapaian...</span>
+                    <span className="text-[15px] text-zinc-300 font-medium">Memuatkan pencapaian...</span>
                   </div>
                 )}
 
-                <span className="text-xs font-semibold tracking-wide text-zinc-300">
+                <span className="text-[15px] font-semibold tracking-wide text-zinc-300">
                   {currentPage === 1 && moduleNumber > 1 && isSkala1 ? 'Halaman 1: Intensive Harf (3 Harf sebaris)' : currentPage === 1 ? 'Halaman 1: Pengenalan Huruf' : `Halaman ${currentPage}: Latihan & Ulangkaji`}
                 </span>
 
@@ -359,17 +344,17 @@ export default function ModuleDetailPage({ params }: PageProps) {
                   <button
                     onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
-                    className={`px-4 py-1.5 rounded-full text-xs font-medium border border-white/15 transition-all ${currentPage === 1 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-zinc-900 text-zinc-300'}`}
+                    className={`px-4 py-1.5 rounded-full text-[15px] font-medium border border-white/15 transition-all ${currentPage === 1 ? 'opacity-30 cursor-not-allowed' : 'hover:bg-zinc-900 text-zinc-300'}`}
                   >
                     &lt;
                   </button>
 
-                  <span className="text-xs font-mono text-zinc-400">{currentPage} / {totalPages}</span>
+                  <span className="text-[15px] font-mono text-zinc-400">{currentPage} / {totalPages}</span>
 
                   <button
                     onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
-                    className={`px-4 py-1.5 rounded-full text-xs font-medium border border-white/15 transition-all ${currentPage === totalPages ? 'opacity-30 cursor-not-allowed' : 'hover:bg-zinc-900 text-zinc-300'}`}
+                    className={`px-4 py-1.5 rounded-full text-[15px] font-medium border border-white/15 transition-all ${currentPage === totalPages ? 'opacity-30 cursor-not-allowed' : 'hover:bg-zinc-900 text-zinc-300'}`}
                   >
                     &gt;
                   </button>
@@ -383,7 +368,7 @@ export default function ModuleDetailPage({ params }: PageProps) {
           <div className="flex justify-center">
             <Link 
               href={`/skala/${id}/module/${modNum}/test`}
-              className={`inline-flex items-center justify-center py-2 px-6 rounded-full font-medium text-xs shadow-lg transition-transform hover:scale-105 bg-transparent border-2 ${theme.accentBorder} ${theme.accentBg}`}
+              className={`inline-flex items-center justify-center py-2.5 px-6 rounded-full font-medium text-[15px] shadow-lg transition-transform hover:scale-105 bg-transparent border-2 ${theme.accentBorder} ${theme.accentBg}`}
             >
               Mula Ujian Modul {modNum}
             </Link>
@@ -391,7 +376,7 @@ export default function ModuleDetailPage({ params }: PageProps) {
         </div>
       </div>
 
-      <footer className={`w-full pt-3 pb-3 border-t ${theme.footerBorder} text-center text-xs text-white relative z-10 font-sans shrink-0`}>
+      <footer className={`w-full pt-3 pb-3 border-t ${theme.footerBorder} text-center text-[15px] text-white relative z-10 font-sans shrink-0`}>
         &copy; {new Date().getFullYear()} Iqra&apos; Master By DxiaTech. All Rights Reserved.
       </footer>
     </main>
