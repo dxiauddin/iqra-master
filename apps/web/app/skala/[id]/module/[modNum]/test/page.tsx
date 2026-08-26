@@ -43,7 +43,7 @@ export default function ModuleTestPage({ params }: PageProps) {
     }
   }, []);
 
-  // Theme configuration matching Skala backgrounds and glowing multi-color beams
+  // Theme configuration perfectly matching the exact Skala gradients and accents
   const getTheme = (skalaId: string) => {
     switch (skalaId) {
       case '1':
@@ -121,8 +121,16 @@ export default function ModuleTestPage({ params }: PageProps) {
 
   const theme = getTheme(id);
 
+  // Generate Questions & Preload Audio into browser memory instantly to prevent Vercel lag
   useEffect(() => {
     const alphabet = id === '1' ? skala1Alphabet : skala2Alphabet;
+    
+    // Preload audio files immediately on mount
+    alphabet.forEach((item) => {
+      const audio = new Audio(`/audio/letters/${item.name.toLowerCase()}.mp3`);
+      audio.load();
+    });
+
     const shuffledAlphabet = [...alphabet].sort(() => Math.random() - 0.5);
     
     const generatedQuestions = shuffledAlphabet.slice(0, 10).map((item) => {
@@ -154,6 +162,7 @@ export default function ModuleTestPage({ params }: PageProps) {
     }, 1000);
   };
 
+  // Instant response execution without unnecessary heavy delays
   const handleAnswerSelect = (optionName: string) => {
     if (selectedOption !== null) return;
 
@@ -165,17 +174,19 @@ export default function ModuleTestPage({ params }: PageProps) {
     const newScore = correct ? score + currentScoreIncrement : score;
     if (correct) setScore(newScore);
 
+    // Fast-tracked transition to keep mobile audio gesture contexts alive
     setTimeout(() => {
       if (currentIndex + 1 < questions.length) {
-        setCurrentIndex((prev) => prev + 1);
+        const nextIndex = currentIndex + 1;
+        setCurrentIndex(nextIndex);
         setSelectedOption(null);
         setIsCorrect(null);
-        playTargetAudio(questions[currentIndex + 1]?.targetName);
+        playTargetAudio(questions[nextIndex]?.targetName);
       } else {
         setScore(correct ? score + 10 : score);
         setIsCompleted(true);
       }
-    }, 1200);
+    }, 500); // Reduced from 1200ms to 500ms for snappy mobile response
   };
 
   const handleShareWhatsApp = async () => {
@@ -264,7 +275,7 @@ export default function ModuleTestPage({ params }: PageProps) {
               <div className="absolute inset-[-150%] bg-[conic-gradient(from_0deg,#3B82F6,#FACC15,#EF4444,#3B82F6)] animate-spin-slow" />
             </div>
 
-            {/* Spinning Border Container */}
+            {/* Spinning Border Container with Multi-Color Beam */}
             <div className="relative p-[1.5px] rounded-3xl overflow-hidden w-full shadow-[0_15px_35px_rgba(0,0,0,0.8)]">
               <div className="absolute inset-[-150%] bg-[conic-gradient(from_0deg,#3B82F6,#FACC15,#EF4444,#3B82F6)] animate-spin-slow" />
 
